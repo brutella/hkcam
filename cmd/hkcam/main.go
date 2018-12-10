@@ -41,6 +41,7 @@ func main() {
 	}
 
 	var multiStream *bool = flag.Bool("multi_stream", true, "Allow mutliple clients to view the stream simultaneously")
+	var dataDir *string = flag.String("data_dir", "", "Path to data directory")
 	var verbose *bool = flag.Bool("verbose", false, "Verbose logging")
 	flag.Parse()
 
@@ -52,7 +53,7 @@ func main() {
 	switchInfo := accessory.Info{Name: "Camera"}
 	cam := accessory.NewCamera(switchInfo)
 
-	t, err := hc.NewIPTransport(hc.Config{}, cam.Accessory)
+	t, err := hc.NewIPTransport(hc.Config{StoragePath: *dataDir}, cam.Accessory)
 	if err != nil {
 		log.Info.Panic(err)
 	}
