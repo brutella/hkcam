@@ -15,4 +15,5 @@ package-rpi: build-rpi
 	tar -cvzf $(PACKAGE_RPI).tar.gz -C $(BUILD_DIR) $(PACKAGE_RPI)
 
 build-rpi:
+	unset GOPATH # go modules
 	GOOS=linux GOARCH=arm GOARM=6 $(GOBUILD) -o $(BUILD_DIR)/$(PACKAGE_RPI)/usr/bin/hkcam -i cmd/hkcam/main.go
