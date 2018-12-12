@@ -7,7 +7,6 @@ import (
 	"github.com/brutella/hc/rtp"
 	"github.com/brutella/hc/service"
 	"github.com/brutella/hc/tlv8"
-	"math/rand"
 	"net"
 
 	"github.com/brutella/hkcam/ffmpeg"
@@ -111,9 +110,9 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 			version = rtp.IPAddrVersionv6
 		}
 
-		// ssrc is different for every stream
-		ssrcVideo := rand.Int31n(1000)
-		ssrcAudio := rand.Int31n(1000)
+		// TODO ssrc is different for every stream
+		ssrcVideo := int32(1)
+		ssrcAudio := int32(2)
 
 		resp := rtp.SetupEndpointsResponse{
 			SessionId: req.SessionId,
