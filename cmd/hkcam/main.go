@@ -13,7 +13,6 @@ import (
 	"github.com/brutella/hkcam/ffmpeg"
 )
 
-// TODO fix problem with igopv6
 func main() {
 
 	// Platform dependent flags
