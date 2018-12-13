@@ -58,8 +58,9 @@ Here are the things that the ansible playbook does.
     - [v4l2loopback](https://github.com/umlaeute/v4l2loopback) - to create a virtual video device to access the video stream by multiple ffmpeg processes
     - [runit](http://smarden.org/runit/) – to run *hkcam* as a service
 2. Downloads and installs the latest *hkcam* release
-3. Edits `/boot/config.txt` to enable the *bcm2835-v4l2* and *v4l2loopback* kernel modules
-4. Restarts the RPi
+3. Edits `/boot/config.txt` to enable access to the camera
+4. Edits `/etc/modules` to enable the *bcm2835-v4l2* and *v4l2loopback* kernel modules
+5. Restarts the RPi
 
 After the playbook finsihed, the RPi is ready to be used as your own HomeKit camera.
 
