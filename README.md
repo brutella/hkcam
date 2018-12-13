@@ -64,7 +64,7 @@ Here are the things that the ansible playbook does.
 
 After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 
-**I highly recommend to change the password of the `pi` user once your finished configuring your RPi.**
+**I highly recommend to change the password of the `pi` user once you haveconfigured your RPi.**
 
 ## Features
 
