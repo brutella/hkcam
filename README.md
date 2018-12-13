@@ -11,16 +11,20 @@
 The fastest way to get started is to
 
 1. download the project on a Mac with a built-in iSight camera
-    ´´´
-    git clone https://github.com/brutella/hkcam && cd hkcam
-    ´´´
+
+       # /bin/sh
+       git clone https://github.com/brutella/hkcam && cd hkcam
+    
 2. build and run `cmd/hkcam/main.go` by running `make run` in Terminal
 3. open any HomeKit app and add the camera to your home
 4. enjoy your own HomeKit camera 🤓
 
 > This steps require *git* and *go* to be installed. If you need to, you can install them via Homebrew.
-> `brew install git`
-> `brew install go`
+> ```
+> # /bin/sh
+> brew install git
+> brew install go
+> ```
 
 ### RPi
 
@@ -31,13 +35,17 @@ The easiest way to get started is to
 1. install [Rasbian](https://www.raspberrypi.org/downloads/raspbian/) on your RPI and enable ssh (and WiFi if needed)
 2. run the playbook
   
-    ansible-playbook rpi.yml -i raspberrypi.local,
+       # /bin/sh
+       ansible-playbook rpi.yml -i raspberrypi.local,
     
 3. open any HomeKit app and add the camera to your home
 4. enjoy your own HomeKit camera 🤓
 
 > This steps require *ansible* to be installed. If you're on a Mac you can install it via Homebrew.
-> `brew install ansible`
+> ```
+> # /bin/sh
+> brew install ansible
+> ```
 
 #### What does the playbook do?
 
