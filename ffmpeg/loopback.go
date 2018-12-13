@@ -37,7 +37,7 @@ func (l *loopback) Start() error {
 			return err
 		}
 		// FIXME: Starting ffmpeg takes some time
-		time.Sleep(2 * time.Second)
+		time.Sleep(1 * time.Second)
 		l.active = cmd
 	}
 
