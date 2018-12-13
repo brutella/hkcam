@@ -19,7 +19,7 @@ The fastest way to get started is to
 3. open any HomeKit app and add the camera to your home
 4. enjoy your own HomeKit camera 🤓
 
-> This steps require *git* and *go* to be installed. If you need to, you can install them via Homebrew.
+> These steps require *git* and *go* to be installed. If you need to, you can install them via Homebrew.
 > ```
 > # /bin/sh
 > brew install git
