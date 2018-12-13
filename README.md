@@ -62,7 +62,7 @@ Here are the things that the ansible playbook does.
 4. Edits `/etc/modules` to enable the *bcm2835-v4l2* and *v4l2loopback* kernel modules
 5. Restarts the RPi
 
-After the playbook finsihed, the RPi is ready to be used as your own HomeKit camera.
+After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 
 **After finishing the configuration of your RPi, I recommend to change the password of the default `pi` user.**
 
