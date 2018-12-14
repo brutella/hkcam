@@ -8,6 +8,9 @@ VERSION=$(shell git describe --exact-match --tags 2>/dev/null)
 BUILD_DIR=build
 PACKAGE_RPI=hkcam-$(VERSION)_linux_armhf
 
+# unset GOPATH to us Go modules
+unexport GOPATH
+
 test:
 	$(GOTEST) -v ./...
 
@@ -16,12 +19,10 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 run:
-	unset GOPATH
 	$(GORUN) cmd/hkcam/main.go
 
 package-rpi: build-rpi
 	tar -cvzf $(PACKAGE_RPI).tar.gz -C $(BUILD_DIR) $(PACKAGE_RPI)
 
 build-rpi:
-	unset GOPATH
 	GOOS=linux GOARCH=arm GOARM=6 $(GOBUILD) -o $(BUILD_DIR)/$(PACKAGE_RPI)/usr/bin/hkcam -i cmd/hkcam/main.go
