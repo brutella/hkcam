@@ -16,10 +16,10 @@ The fastest way to get started is to
        git clone https://github.com/brutella/hkcam && cd hkcam
     
 2. build and run `cmd/hkcam/main.go` by running `make run` in Terminal
-3. open any HomeKit app and add the camera to your home
+3. open any HomeKit app and add the camera to HomeKit
 4. enjoy your own HomeKit camera 🤓
 
-> These steps require *git* and *go* to be installed. If you need to, you can install them via Homebrew.
+> These steps require *git* and *go* to be installed. On macOS ou can install them via Homebrew.
 > ```
 > # /bin/sh
 > brew install git
@@ -33,15 +33,15 @@ If you want to create your own surveillance camera, you can run *hkcam* on a Ras
 The easiest way to get started is to
 
 1. install [Rasbian](https://www.raspberrypi.org/downloads/raspbian/) on your RPI and enable ssh (and WiFi if needed)
-2. run the playbook
+2. run the `rpi` playbook
   
        # /bin/sh
        ansible-playbook rpi.yml -i raspberrypi.local,
     
-3. open any HomeKit app and add the camera to your home
+3. open any HomeKit app and add the camera to HomeKit
 4. enjoy your own HomeKit camera 🤓
 
-> This steps require *ansible* to be installed. If you're on a Mac you can install it via Homebrew.
+> These steps require *ansible* to be installed. On macOS you can install it via Homebrew.
 > ```
 > # /bin/sh
 > brew install ansible
@@ -49,7 +49,7 @@ The easiest way to get started is to
 
 #### What does the playbook do?
 
-The ansible playbook configures the Raspberry Pi in a way that is required by *hkcam*. It does that by connecting to the RPi via ssh and running commands on it. You can do the same thing manually on the shell but ansible does it automatically.
+The ansible playbook configures the Raspberry Pi in a way that is required by *hkcam*. It does that by connecting to the RPi via ssh and running commands on it. You can do the same thing manually on the shell but ansible is more convenient.
 
 Here are the things that the ansible playbook does.
 
@@ -64,13 +64,18 @@ Here are the things that the ansible playbook does.
 
 After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 
-**I highly recommend to change the password of the `pi` user once you haveconfigured your RPi.**
+**I recommend to change the password of the `pi` user once you have configured your RPi.**
 
 ## Features
 
-- 100% Go
+- *hkcam* is completely written in Go
 - Works with any HomeKit app
 - Runs on multiple platforms (Linux, macOS)
+
+## TODO
+
+- [ ] Support audio
+- [ ] Implement self-update mechanism
 
 # Contact
 
