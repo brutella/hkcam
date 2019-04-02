@@ -40,8 +40,8 @@ func main() {
 	}
 
 	var multiStream *bool = flag.Bool("multi_stream", true, "Allow mutliple clients to view the stream simultaneously")
-	var dataDir *string = flag.String("data_dir", "", "Path to data directory")
-	var verbose *bool = flag.Bool("verbose", false, "Verbose logging")
+	var dataDir *string = flag.String("data_dir", "Camera", "Path to data directory")
+	var verbose *bool = flag.Bool("verbose", true, "Verbose logging")
 	flag.Parse()
 
 	if *verbose {
@@ -52,29 +52,37 @@ func main() {
 	switchInfo := accessory.Info{Name: "Camera"}
 	cam := accessory.NewCamera(switchInfo)
 
+	cfg := ffmpeg.Config{
+		InputDevice:      *inputDevice,
+		InputFilename:    *inputFilename,
+		LoopbackFilename: *loopbackFilename,
+		H264Decoder:      *h264Decoder,
+		H264Encoder:      *h264Encoder,
+		MultiStream:      *multiStream,
+	}
+
+	ffmpeg := hkcam.SetupFFMPEGStreaming(cam, cfg)
+
+	// Add a custom camera control service to record snapshots
+	cc := hkcam.NewCameraControl()
+	cc.SetupWithDir(*dataDir)
+	cam.Control.AddCharacteristic(cc.Assets.Characteristic)
+	cam.Control.AddCharacteristic(cc.GetAsset.Characteristic)
+	cam.Control.AddCharacteristic(cc.DeleteAssets.Characteristic)
+	cam.Control.AddCharacteristic(cc.TakeSnapshot.Characteristic)
+
 	t, err := hc.NewIPTransport(hc.Config{StoragePath: *dataDir}, cam.Accessory)
 	if err != nil {
 		log.Info.Panic(err)
 	}
 
-	go func() {
-		ips := t.WaitForIPs()
-		cfg := ffmpeg.Config{
-			InputDevice:      *inputDevice,
-			InputFilename:    *inputFilename,
-			LoopbackFilename: *loopbackFilename,
-			H264Decoder:      *h264Decoder,
-			H264Encoder:      *h264Encoder,
-			MultiStream:      *multiStream,
-		}
+	t.CameraSnapshotReq = func(width, height uint) (*image.Image, error) {
+		return ffmpeg.Snapshot(width, height)
+	}
 
-		// Setup video streaming via ffmpeg
-		ffmpeg := hkcam.SetupFFMPEGStreaming(cam, cfg, ips)
-
-		t.HandleCameraSnapshotRequest(func(width, height uint) (*image.Image, error) {
-			return ffmpeg.Snapshot(width, height)
-		})
-	}()
+	cc.CameraSnapshotReq = func(width, height uint) (*image.Image, error) {
+		return ffmpeg.Snapshot(width, height)
+	}
 
 	hc.OnTermination(func() {
 		<-t.Stop()

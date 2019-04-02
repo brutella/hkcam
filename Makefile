@@ -21,8 +21,8 @@ clean:
 run:
 	$(GORUN) cmd/hkcam/main.go
 
-package-rpi: build-rpi
+package: build
 	tar -cvzf $(PACKAGE_RPI).tar.gz -C $(BUILD_DIR) $(PACKAGE_RPI)
 
-build-rpi:
+build:
 	GOOS=linux GOARCH=arm GOARM=6 $(GOBUILD) -o $(BUILD_DIR)/$(PACKAGE_RPI)/usr/bin/hkcam -i cmd/hkcam/main.go

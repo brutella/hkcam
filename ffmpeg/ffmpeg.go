@@ -2,8 +2,8 @@ package ffmpeg
 
 import (
 	"fmt"
-	"github.com/brutella/hc/rtp"
 	"github.com/brutella/hc/log"
+	"github.com/brutella/hc/rtp"
 	"image"
 	"io/ioutil"
 	"os"
@@ -208,5 +208,5 @@ type StreamNotFoundError struct {
 }
 
 func (e *StreamNotFoundError) Error() string {
-	return fmt.Sprintf("StreamID(%v) not found", e.id)
+	return fmt.Sprintf("StreamID(%v) not found", []byte(e.id))
 }

@@ -14,11 +14,11 @@ import (
 
 // SetupFFMPEGStreaming configures a camera to use ffmpeg to stream video.
 // The returned handle can be used to interact with the camera (start, stop, take snapshot…).
-func SetupFFMPEGStreaming(cam *accessory.Camera, cfg ffmpeg.Config, ips []net.IP) ffmpeg.FFMPEG {
+func SetupFFMPEGStreaming(cam *accessory.Camera, cfg ffmpeg.Config) ffmpeg.FFMPEG {
 	ff := ffmpeg.New(cfg)
 
-	setupStreamManagement(cam.StreamManagement1, ff, ips, cfg.MultiStream)
-	setupStreamManagement(cam.StreamManagement2, ff, ips, cfg.MultiStream)
+	setupStreamManagement(cam.StreamManagement1, ff, cfg.MultiStream)
+	setupStreamManagement(cam.StreamManagement2, ff, cfg.MultiStream)
 
 	return ff
 }
@@ -33,7 +33,7 @@ func first(ips []net.IP, filter func(net.IP) bool) net.IP {
 	return nil
 }
 
-func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPEG, ips []net.IP, multiStream bool) {
+func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPEG, multiStream bool) {
 	status := rtp.StreamingStatus{rtp.StreamingStatusAvailable}
 	setTLV8Payload(m.StreamingStatus.Bytes, status)
 	setTLV8Payload(m.SupportedRTPConfiguration.Bytes, rtp.NewSupportedRTPConfiguration(rtp.CryptoSuite_AES_CM_128_HMAC_SHA1_80))
@@ -79,7 +79,8 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 		}
 	})
 
-	m.SetupEndpoints.OnValueRemoteUpdate(func(buf []byte) {
+	m.SetupEndpoints.OnValueUpdateFromConn(func(conn net.Conn, c *characteristic.Characteristic, new, old interface{}) {
+		buf := m.SetupEndpoints.GetValue()
 		var req rtp.SetupEndpoints
 		err := tlv8.Unmarshal(buf, &req)
 		if err != nil {
@@ -88,26 +89,16 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 
 		log.Debug.Printf("%+v\n", req)
 
-		// find the ip adress with the same version as the controller
-		ip := first(ips, func(ip net.IP) bool {
-			switch req.ControllerAddr.IPVersion {
-			case rtp.IPAddrVersionv4:
-				return ip.To4() != nil
-			case rtp.IPAddrVersionv6:
-				return ip.To4() == nil
-			default:
-				return false
-			}
-		})
-
-		if ip == nil {
-			log.Info.Println("No IP address of version", req.ControllerAddr.IPVersion)
-			return
+		// respond with the IP address to which the request was sent to
+		ip := conn.LocalAddr().(*net.TCPAddr).IP
+		var ipVersion = rtp.IPAddrVersionv4
+		if ip.To4() == nil {
+			ipVersion = rtp.IPAddrVersionv6
 		}
 
-		var version = rtp.IPAddrVersionv4
-		if ip.To4() == nil {
-			version = rtp.IPAddrVersionv6
+		if ipVersion != req.ControllerAddr.IPVersion {
+			log.Info.Println("No IP version", req.ControllerAddr.IPVersion)
+			return
 		}
 
 		// TODO ssrc is different for every stream
@@ -118,7 +109,7 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 			SessionId: req.SessionId,
 			Status:    rtp.SessionStatusSuccess,
 			AccessoryAddr: rtp.Addr{
-				IPVersion:    version,
+				IPVersion:    ipVersion,
 				IPAddr:       ip.String(),
 				VideoRtpPort: req.ControllerAddr.VideoRtpPort,
 				AudioRtpPort: req.ControllerAddr.AudioRtpPort,
