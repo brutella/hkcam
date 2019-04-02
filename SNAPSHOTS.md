@@ -2,10 +2,10 @@
 
 In addition to live streaming, `hkcam` lets you take snapshots.
 Those snapshots are stored in the file system and can be loaded via custom characteristics.
-[Persistent Snapshots](/SNAPSHOTS.md) are currently only supported by my [Home](https//hochgatterer.me/home) app.
-If you are an app developer, you can implement the same functionality based on the following characteristic documentation.
+[Persistent Snapshots](/SNAPSHOTS.md) are currently only supported by my [Home](https://hochgatterer.me/home) app.
+If you are an app developer, you can implement the same functionality by using the following characteristics.
 
-## Characteristics
+## Custom Characteristics
 
 The following characteristics are used to take, get and delete snapshots.
 
@@ -14,12 +14,12 @@ The following characteristics are used to take, get and delete snapshots.
 - [GetAsset](/get_asset.go) returns raw bytes representing a snapshot JPEG image.
 - [DeleteAssets](/delete_assets.go) deletes snapshots.
 
-To take a snapshot, you should send `true` to the [TakeSnapshot](/take_snapshot.go) characteristic.
+To take a snapshot, you should write `true` to the [TakeSnapshot](/take_snapshot.go) characteristic.
 
 ---
 
 After that the [Assets](/assets.go) characteristic contains the snapshot in the returned JSON.
-The content of the [Assets](/assets.go) characteritic might look like this.
+The value of the [Assets](/assets.go) characteristic might look like this.
 
 ```json
 {
@@ -34,7 +34,7 @@ The content of the [Assets](/assets.go) characteritic might look like this.
 
 ---
 
-To get the bytes of the snapshot with id *1.jpg*, you should send the following JSON to the [GetAsset](/get_asset.go) characteristic.
+To get the bytes of the snapshot with id `1.jpg`, you should send the following JSON to the [GetAsset](/get_asset.go) characteristic.
 
 ```json
 {

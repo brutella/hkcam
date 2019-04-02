@@ -2,11 +2,11 @@
 
 *hkcam* is an open-source implementation of an HomeKit IP-camera. 
 It uses `ffmpeg` to access the camera stream and publishes the stream to HomeKit using [hc](https://github.com/brutella/hc). 
-The camera stream can be viewed in a HomeKit app. For example my [Home](https//hochgatterer.me/home) app works perfectly with *hkcam*.
+The camera stream can be viewed in a HomeKit app. For example my [Home](https://hochgatterer.me/home) app works perfectly with *hkcam*.
 
 In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHOTS.md).
 This means that `hkcam` can store snapshots and provides them via custom HomeKit characteristics.
-[Persistent Snapshots](/SNAPSHOTS.md) are currently only supported by my [Home](https//hochgatterer.me/home) app.
+[Persistent Snapshots](/SNAPSHOTS.md) are currently only supported by my [Home](https://hochgatterer.me/home) app.
 
 ## Get Started
 
