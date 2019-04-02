@@ -19,6 +19,10 @@ import (
 
 const TypeCameraControl = "19BDAD9E-6102-48D5-B413-3F11253706AE"
 
+// RefDate represents the reference date used to generate asset ids.
+// Short ids are prefered and therefore we use 1st April 2019 as the reference date.
+var RefDate = time.Date(2019, 4, 1, 0, 0, 0, 0, time.UTC)
+
 type CameraControl struct {
 	TakeSnapshot *TakeSnapshot
 	Assets       *Assets
@@ -125,7 +129,7 @@ func (cc *CameraControl) SetupWithDir(dir string) {
 			if err != nil {
 				log.Info.Println(err)
 			} else {
-				name := fmt.Sprintf("%s.jpg", time.Now().Format(time.RFC3339))
+				name := fmt.Sprintf("%.0f.jpg", time.Now().Sub(RefDate).Seconds())
 				path := filepath.Join(dir, name)
 
 				buf := new(bytes.Buffer)
@@ -238,25 +242,6 @@ func (cc *CameraControl) watch(dir string, r *regexp.Regexp) {
 	if err := w.Start(time.Second * 1); err != nil {
 		log.Info.Fatalln(err)
 	}
-}
-
-type AssetsMetadataResponse struct {
-	Assets []CameraAssetMetadata `json:"assets"`
-}
-
-type CameraAssetMetadata struct {
-	ID   string `json:"id"`
-	Date string `json:"date"`
-}
-
-type GetAssetRequest struct {
-	ID     string `json:"id"`
-	Width  uint   `json:"width"`
-	Height uint   `json:"height"`
-}
-
-type DeleteAssetsRequest struct {
-	IDs []string `json:"ids"`
 }
 
 type snapshot struct {
