@@ -9,14 +9,10 @@ In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHO
 You can then access them via HomeKit.
 *Persistent Snapshots* are currently only supported by my [Home](https://hochgatterer.me/home) app.
 
-**Live Streaming in [Home.app](https://hochgatterer.me/home)**
-
-<img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" />
-
-**Persistent Snapshots in [Home.app](https://hochgatterer.me/home)**
-
-<img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" />
-<img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" />
+The following screenshots are taken from [Home.app](https://hochgatterer.me/home)
+| Live Streaming | List of Snapshots | Snapshot |
+| -------------- | ----------------- | -------- |
+| <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> | <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> |
 
 ## Features
 
