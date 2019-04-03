@@ -13,7 +13,7 @@ as you can see from the following screenshots.
 
 | Services | Live Streaming | List of Snapshots |
 |--------- | -------------- | ----------------- |
-| <img alt="Live streaming" src="_img/services.jpg?raw=true" width="280" /> | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> |
+| <img alt="Services" src="_img/services.jpg?raw=true" width="280" /> | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> |
 
 | Snapshot | Automation | 
 | --------------| -------------- |
