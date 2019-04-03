@@ -2,7 +2,7 @@
 
 *Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
 You can then access them via HomeKit.
-*Persistent Snapshots* is not a HomeKit IP-camera features, but instead implemented by `hkcam` with custom characteristics.
+*Persistent Snapshots* is not a HomeKit IP camera features, but instead implemented by `hkcam` with custom characteristics.
 
 *Persistent Snapshots* are currently only supported by my [Home](https://hochgatterer.me/home) app.
 
@@ -11,7 +11,7 @@ You can then access them via HomeKit.
 Taking snapshots of a security camera is an essential feature.
 For example you want to take a snapshot once motion is detected in room.
 But the HomeKit Accessory Protocol doesn't define it in the specification, 
-there is currently no IP-camera which supports that via HomeKit.
+there is currently no IP camera which supports that via HomeKit.
 
 `hkcam` implements *Persistent Snapshots* with custom HomeKit characteristics.
 This means you can use this feature in HomeKit scenes and automations.

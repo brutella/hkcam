@@ -1,6 +1,6 @@
 # hkcam
 
-`hkcam` is an open-source implementation of an HomeKit IP-camera. 
+`hkcam` is an open-source implementation of an HomeKit IP camera. 
 It uses `ffmpeg` to access the camera stream and publishes the stream to HomeKit using [hc](https://github.com/brutella/hc).
 The camera stream can be viewed in a HomeKit app. For example my [Home](https://hochgatterer.me/home) app works perfectly with `hkcam`.
 
