@@ -8,8 +8,7 @@ VERSION=$(shell git describe --exact-match --tags 2>/dev/null)
 BUILD_DIR=build
 PACKAGE_RPI=hkcam-$(VERSION)_linux_armhf
 
-# unset GOPATH to us Go modules
-unexport GOPATH
+export GO111MODULE=on
 
 test:
 	$(GOTEST) -v ./...
