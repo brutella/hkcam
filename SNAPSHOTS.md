@@ -1,9 +1,20 @@
 # Persistent Snapshots
 
-In addition to live streaming, `hkcam` lets you take snapshots.
-Those snapshots are stored in the file system and can be loaded via custom characteristics.
-[Persistent Snapshots](/SNAPSHOTS.md) are currently only supported by my [Home](https://hochgatterer.me/home) app.
-If you are an app developer, you can implement the same functionality by using the following characteristics.
+*Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
+You can then access them via HomeKit.
+*Persistent Snapshots* is not a HomeKit IP-camera features, but instead implemented by `hkcam` with custom characteristics.
+
+*Persistent Snapshots* are currently only supported by my [Home](https://hochgatterer.me/home) app.
+
+## Why?
+
+Taking snapshots of a security camera is an essential feature.
+For example you want to take a snapshot once motion is detected in room.
+But the HomeKit Accessory Protocol doesn't define it in the specification, 
+there is currently no IP-camera which supports that via HomeKit.
+
+`hkcam` implements *Persistent Snapshots* with custom HomeKit characteristics.
+This means you can use this feature in HomeKit scenes and automations.
 
 ## Custom Characteristics
 
@@ -11,7 +22,7 @@ The following characteristics are used to take, get and delete snapshots.
 
 - [TakeSnapshot](/take_snapshot.go) takes a snapshot.
 - [Assets](/assets.go) returns an index of all snapshots as JSON.
-- [GetAsset](/get_asset.go) returns raw bytes representing a snapshot JPEG image.
+- [GetAsset](/get_asset.go) returns JPEG data representing a snapshot.
 - [DeleteAssets](/delete_assets.go) deletes snapshots.
 
 To take a snapshot, you should write `true` to the [TakeSnapshot](/take_snapshot.go) characteristic.
@@ -34,7 +45,7 @@ The value of the [Assets](/assets.go) characteristic might look like this.
 
 ---
 
-To get the bytes of the snapshot with id `1.jpg`, you should send the following JSON to the [GetAsset](/get_asset.go) characteristic.
+To get the data of the snapshot with id `1.jpg`, you should send the following JSON to the [GetAsset](/get_asset.go) characteristic.
 
 ```json
 {
@@ -44,7 +55,9 @@ To get the bytes of the snapshot with id `1.jpg`, you should send the following 
 }
 ```
 
-After a successful write, you read the characteristic's value to get the JPEG bytes.
+If you omit `width` or `height` (or set it to `0`), the image keeps the aspect ratio while resizing.
+
+After a successful write, the characteristic's value contains the JPEG data.
 
 ---
 
