@@ -6,6 +6,7 @@ Install ffmpeg and ffplay via `brew install ffmpeg --with-ffplay`.
 ## RTSP Streaming
 
 1. Create an RTSP stream
+
 1.1. Raspberry Pi
 ```sh
 ffmpeg -re -f video4linux2 -i /dev/video0 -map 0:0 -vcodec h264_omx -pix_fmt yuv420p -r 20 -f rawvideo -tune zerolatency -b:v 1500k -bufsize 1500k -payload_type 99 -ssrc 16132552 -f rtp -srtp_out_suite AES_CM_128_HMAC_SHA1_80 -srtp_out_params omz31e5SiZSneUySvSsIaFfu+NW2uWUl9+FHs3HD "srtp://192.168.0.14:58536?rtcpport=58536&localrtcpport=58536&pkt_size=1378"

@@ -15,6 +15,9 @@ The following screenshots are taken from [Home.app](https://hochgatterer.me/home
 | -------------- | ----------------- | -------- |
 | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> | <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> |
 
+| Automation: take snapshot when motion is detected | 
+| -------------- |
+| <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
 ## Features
 
 - Live streaming via RTP
