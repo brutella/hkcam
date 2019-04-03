@@ -7,17 +7,18 @@ The camera stream can be viewed in a HomeKit app. For example my [Home](https://
 In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHOTS.md).
 *Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
 You can then access them via HomeKit.
-*Persistent Snapshots* are currently only supported by my [Home](https://hochgatterer.me/home) app.
 
-The following screenshots are taken from [Home.app](https://hochgatterer.me/home)
+*Persistent Snapshots* is currently supported by my [Home](https://hochgatterer.me/home) app, 
+as you can see from the following screenshots.
 
-| Live Streaming | List of Snapshots | Snapshot |
-| -------------- | ----------------- | -------- |
-| <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> | <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> |
+| Services | Live Streaming | List of Snapshots |
+|--------- | -------------- | ----------------- |
+| <img alt="Live streaming" src="_img/services.jpg?raw=true" width="280" /> | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> |
 
-| Automation: take snapshot when motion is detected | 
-| -------------- |
-| <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
+| Snapshot | Automation | 
+| --------------| -------------- |
+| <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> | <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
+
 ## Features
 
 - Live streaming via RTP
