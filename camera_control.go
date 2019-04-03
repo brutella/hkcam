@@ -93,7 +93,7 @@ func (cc *CameraControl) SetupWithDir(dir string) {
 					return
 				}
 
-				scaled := resize.Resize(req.Width, 0, img, resize.Lanczos3)
+				scaled := resize.Resize(req.Width, req.Height, img, resize.Lanczos3)
 				imgBuf := new(bytes.Buffer)
 				if err := jpeg.Encode(imgBuf, scaled, nil); err != nil {
 					log.Info.Printf("jpeg.Encode() %v", err)
