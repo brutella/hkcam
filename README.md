@@ -9,6 +9,15 @@ In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHO
 You can then access them via HomeKit.
 *Persistent Snapshots* are currently only supported by my [Home](https://hochgatterer.me/home) app.
 
+**Live Streaming in [Home.app](https://hochgatterer.me/home)**
+
+<img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" />
+
+**Persistent Snapshots in [Home.app](https://hochgatterer.me/home)**
+
+<img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" />
+<img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" />
+
 ## Features
 
 - Live streaming via RTP
@@ -32,7 +41,6 @@ git clone https://github.com/brutella/hkcam && cd hkcam
 ```
 2. build and run `cmd/hkcam/main.go` by running `make run` in Terminal
 3. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
-4. enjoy your own HomeKit camera 🤓
 
 These steps require *git* and *go* to be installed. On macOS you can install them via Homebrew.
 
@@ -44,7 +52,7 @@ brew install go
 
 ### RPi
 
-If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi (~$25) with attached camera module (~$20). 
+If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi ($25) with attached camera module ($20). 
 This setup requires more configuration. 
 I've made an [Ansible](http://docs.ansible.com/ansible/index.html) playbook to configure your RPi with just one command.
 
@@ -56,8 +64,7 @@ The easiest way to get started is to
 #! /bin/sh
 ansible-playbook rpi.yml -i raspberrypi.local,
 ```
-3. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `00102003`)
-4. enjoy your own HomeKit camera 🤓
+3. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
 
 These steps require *ansible* to be installed. On macOS you can install it via Homebrew.
 ```sh

@@ -49,15 +49,15 @@ To get the data of the snapshot with id `1.jpg`, you should send the following J
 
 ```json
 {
-    "id":"1.jpg",
-    "width":320,
-    "height":240
+    "id": "1.jpg",
+    "width": 320,
+    "height": 240
 }
 ```
 
 If you omit `width` or `height` (or set it to `0`), the image keeps the aspect ratio while resizing.
 
-After a successful write, the characteristic's value contains the JPEG data.
+After a successful write, the [GetAsset](/get_asset.go) characteristic value contains the JPEG data.
 
 ---
 
@@ -65,7 +65,7 @@ If you want to delete the snapshot, you send the following JSON to the [DeleteAs
 
 ```json
 {
-    "ids":[
+    "ids": [
         "1.jpg"
     ]
 }
