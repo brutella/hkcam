@@ -37,7 +37,6 @@ The fastest way to get started is to
 
 1. download the project on a Mac with a built-in iSight camera
 ```sh
-#! /bin/sh
 git clone https://github.com/brutella/hkcam && cd hkcam
 ```
 2. build and run `cmd/hkcam/main.go` by running `make run` in Terminal
@@ -46,7 +45,6 @@ git clone https://github.com/brutella/hkcam && cd hkcam
 These steps require *git* and *go* to be installed. On macOS you can install them via Homebrew.
 
 ```sh
-#! /bin/sh
 brew install git
 brew install go
 ```
@@ -62,23 +60,30 @@ You can use a pre-configured Rasbian Stretch Lite image, where everything is alr
 You only need to 
 
 1. download the [Rasbian image](https://github.com/brutella/hkcam/releases/download/v0.0.3/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.3.gz) and copy onto an sd card
-- on **macOS** you have to find the disk number for your sd card
-```sh
-# find disk
-diskutil list
-```
-- you will see entries for `/dev/disk0`, `/dev/disk1`…, your sd card may have the disk number **3** and will be mounted at `/dev/disk3`
 
-```sh
-# unmount disk (eg disk3)
-diskutil unmountDisk /dev/rdisk3
+2. install [Etcher.app](https://www.balena.io/etcher/) and flash the downloaded image onto your sd card.
+<img alt="Services" src="_img/etcher.png?raw=true"/>
 
-# copy image on disk3
-sudo dd bs=1m if=~/Downloads/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.3.img of=/dev/rdisk3 conv=sync
-```
+> You can do the same on the command line as well.
+> 
+> On **macOS** you have to find the disk number for your sd card
+> ```sh
+> # find disk
+> diskutil list
+> ```
+> You will see entries for `/dev/disk0`, `/dev/disk1`…, your sd card may have the disk number **3** and will be mounted at `/dev/disk3`
+> 
+> ```sh
+> # unmount disk (eg disk3)
+> diskutil unmountDisk /dev/rdisk3
+> 
+> # copy image on disk3
+> sudo dd bs=1m if=~/Downloads/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.3.img of=/dev/rdisk3 conv=sync
+> ```
+
 3. add your WiFi credentials so that the Raspberry Pi can connect you WiFi
 
-- create a new file at `/Volumes/boot/wpa_supplicant.conf` with the followig content
+- create a new text file at `/Volumes/boot/wpa_supplicant.conf` with the followig content
 ```sh
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
@@ -109,7 +114,6 @@ The easiest way to get started is to
 
 2. run the `rpi` playbook
 ```sh
-#! /bin/sh
 cd ansible && ansible-playbook rpi.yml -i hosts --ask-pass
 ```
 3. use `raspberry` as the SSH password
@@ -117,7 +121,6 @@ cd ansible && ansible-playbook rpi.yml -i hosts --ask-pass
 
 These steps require *ansible* to be installed. On macOS you can install it via Homebrew.
 ```sh
-#! /bin/sh
 brew install ansible
 ```
 
