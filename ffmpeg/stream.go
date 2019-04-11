@@ -47,7 +47,8 @@ func (s *stream) start(video rtp.VideoParameters, audio rtp.AudioParameters) err
 		" -an" +
 		fmt.Sprintf(" -codec:v %s", s.videoEncoder(video)) +
 		" -pix_fmt yuv420p -vsync 2" +
-		fmt.Sprintf(" -video_size %dx%d", video.Attributes.Width, video.Attributes.Height) +
+		// height "-2" keeps the aspect ratio
+		fmt.Sprintf(" -video_size %d:-2", video.Attributes.Width) +
 		fmt.Sprintf(" -framerate %d", video.Attributes.Framerate) +
 		// 2018-08-18 (mah) Disable profile arguments because it cannot be parsed
 		// [h264_omx @ 0x93a410] [Eval @ 0xbeaad160] Undefined constant or missing '(' in 'high'

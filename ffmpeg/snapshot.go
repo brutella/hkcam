@@ -16,7 +16,8 @@ func snapshot(width, height uint, inputDevice, inputFilename string) (*image.Ima
 	fileName := fmt.Sprintf("snapshot_%s.jpeg", time.Now().Format(time.RFC3339))
 	filePath := path.Join(os.TempDir(), fileName)
 
-	arg := fmt.Sprintf("-f %s -framerate 30 -i %s -s %dx%d -frames:v 1 %s", inputDevice, inputFilename, width, height, filePath)
+	// height "-2" keeps the aspect ratio
+	arg := fmt.Sprintf("-f %s -framerate 30 -i %s -vf scale=%d:-2 -frames:v 1 %s", inputDevice, inputFilename, width, filePath)
 	args := strings.Split(arg, " ")
 
 	cmd := exec.Command("ffmpeg", args[:]...)
