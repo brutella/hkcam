@@ -6,7 +6,7 @@
     
 - name: Download {{ hkcam_download_url }} to {{ hkcam_download_dest }}
   copy:
-      src: /Users/mah/Source/Code/Go/src/github.com/brutella/hkcam/hkcam-v0.0.4_linux_armhf.tar.gz
+      src: /Users/mah/Source/Code/Go/src/github.com/brutella/hkcam/{{ hkcam_download_file_name }}
       dest: "{{ hkcam_download_dir }}"
       owner: pi
       group: pi
