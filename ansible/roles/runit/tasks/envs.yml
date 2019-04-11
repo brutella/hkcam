@@ -1,0 +1,34 @@
+# Sets environment variables by creating a directory called *env* in the service root directory.
+# 
+# Example
+# 
+#     envs:
+#        TOKEN: 1234ABCD
+# 
+# creates the file `env/TOKEN` with the content `1234ABCD`.
+---
+- name: Define runit service directory
+  set_fact:
+    service_run_dir: "{{ runit_services_dir }}/{{ service_name }}"
+
+- name: Define runit service env directory
+  set_fact:
+     service_env_dir: "{{ service_run_dir }}/env"
+
+- name: Set env variables
+  copy:
+    content: "{{ item.value }}"
+    dest: "{{ service_env_dir }}/{{ item.key }}"
+  with_dict: "{{ envs }}"
+
+- name: Define all env files
+  find:
+    paths: "{{ service_env_dir }}"
+  register: found
+
+- name: Delete unused env files
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  when: "(item.path|basename) is not in envs"
+  with_items: "{{ found.files }}"

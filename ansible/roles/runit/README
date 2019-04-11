@@ -1,0 +1,17 @@
+The runit role lets you run services using runit.
+
+Options
+- enabled (boolean, optional) – If `true`, the service is registered in runit. If `false`, the service is unregistered in runit.
+- state (string: `started`, `stopped`, optional) – If `stopped` the service should be stopped. If `started` the service should be started.
+- envs (dict, optional) – A list of key-value pairs for environment variables.
+- service_name (string, required) – The name of the service
+- run_script (shell script) – The script to run the service
+    For example
+    
+    #!/bin/sh -e
+    # redirects all stderr output to stdout
+    exec 2>&1
+    exec telegraf --config /etc/telegraf/telegraf.conf
+
+- finish_script (shell script) – The script which is excuted when the run script finishes.
+- log_dir (string) – Path to the log directory, e.g. `/var/log/{service_name}`

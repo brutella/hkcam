@@ -21,9 +21,9 @@ as you can see from the following screenshots.
 
 ## Features
 
-- Live streaming via RTP
-- [Persistent Snapshots](/SNAPSHOTS.md)
+- Live streaming via HomeKit
 - Works with any HomeKit app
+- [Persistent Snapshots](/SNAPSHOTS.md)
 - Completely written in Go
 - Runs on multiple platforms (Linux, macOS)
 
@@ -51,21 +51,69 @@ brew install git
 brew install go
 ```
 
-### RPi
+### Raspberry Pi
 
 If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi ($25) with attached camera module ($20). 
-This setup requires more configuration. 
+
+#### Pre-configured Rasbian  Image
+
+You can use a pre-configured Rasbian Stretch Lite image, where everything is already configured.
+
+You only need to 
+
+1. download the [Rasbian image](https://github.com/brutella/hkcam/releases/download/v0.0.3/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.3.gz) and copy onto an sd card
+- on **macOS** you have to find the disk number for your sd card
+```sh
+# find disk
+diskutil list
+```
+- you will see entries for `/dev/disk0`, `/dev/disk1`…, your sd card may have the disk number **3** and will be mounted at `/dev/disk3`
+
+```sh
+# unmount disk (eg disk3)
+diskutil unmountDisk /dev/rdisk3
+
+# copy image on disk3
+sudo dd bs=1m if=~/Downloads/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.3.img of=/dev/rdisk3 conv=sync
+```
+3. add your WiFi credentials so that the Raspberry Pi can connect you WiFi
+
+- create a new file at `/Volumes/boot/wpa_supplicant.conf` with the followig content
+```sh
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={
+ssid="<ssid>"
+psk="<password>"
+}
+```
+- replace `<ssid>` with the name of your WiFi, and `<password>` with the WiFi password.
+    
+4. insert the sd card into your Raspberry Pi and power it up.
+
+
+#### Manual Configuration
+
+If you want, you can configure your Raspberry Pi manually.
+This setup requires more configuration.
 I've made an [Ansible](http://docs.ansible.com/ansible/index.html) playbook to configure your RPi with just one command.
 
 The easiest way to get started is to
 
-1. install [Rasbian](https://www.raspberrypi.org/downloads/raspbian/) on your RPI and enable ssh (and WiFi if needed)
+1. configure your Raspberry Pi
+
+- install [Rasbian](https://www.raspberrypi.org/downloads/raspbian/) 
+- [enable ssh](https://gist.github.com/brutella/0780479ceefc5d25a805b86ea795a3c6) (and WiFi if needed)
+- connect a camera module
+
 2. run the `rpi` playbook
 ```sh
 #! /bin/sh
-ansible-playbook rpi.yml -i raspberrypi.local,
+cd ansible && ansible-playbook rpi.yml -i hosts --ask-pass
 ```
-3. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
+3. use `raspberry` as the SSH password
+4. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
 
 These steps require *ansible* to be installed. On macOS you can install it via Homebrew.
 ```sh
@@ -92,7 +140,10 @@ Here are the things that the ansible playbook does.
 
 After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 
-**I recommend to change the password of the `pi` user, once you have configured your Raspberry Pi.**
+**Additional Steps**
+
+- I recommend to change the password of the `pi` user, once you have configured your Raspberry Pi.
+- If you want to have multiple cameras on your network, you have to make sure that the hostnames are unqiue. By default the hostname of the Raspberry Pi is `raspberrypi.local`.
 
 ## TODO
 

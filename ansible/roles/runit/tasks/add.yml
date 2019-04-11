@@ -1,0 +1,68 @@
+---
+- assert:
+    that: service_name is defined
+    fail_msg: Variable '{{ service_name }}' ist not defined
+
+- assert:
+    that: run_script is defined
+    fail_msg: Variable '{{ run_script }}' ist not defined
+
+- assert:
+    that: log_dir is defined
+    fail_msg: Variable '{{ log_dir }}' ist not defined
+
+- name: Define runit service directory
+  set_fact:
+    service_run_dir: "{{ runit_services_dir }}/{{ service_name }}"
+- name: Define runit service log directory
+  set_fact:
+     service_log_run_dir: "{{ service_run_dir }}/log"
+- name: Define runit service env directory
+  set_fact:
+     service_env_dir: "{{ service_run_dir }}/env"
+
+- name: Ensure that {{ service_env_dir }} exists
+  file: 
+    path: "{{ service_env_dir }}"
+    mode: 0755
+    state: directory
+- name: Ensure that {{ log_dir }} exists
+  file: 
+    path: "{{ log_dir }}"
+    mode: 0755
+    state: directory
+- name: Ensure that {{ service_run_dir }} exists
+  file: 
+    path: "{{ service_run_dir }}"
+    mode: 0755
+    state: directory
+- name: Ensure that {{ service_log_run_dir }} exists
+  file: 
+    path: "{{ service_log_run_dir }}"
+    mode: 0755
+    state: directory
+
+- name: Create service run file {{ service_run_dir }}/run
+  template:
+    src: run.j2
+    dest: "{{ service_run_dir }}/run"
+    mode: 0755
+
+- name: Create log run file {{ service_log_run_dir }}/run
+  template:
+    src: log-run.j2
+    dest: "{{ service_log_run_dir }}/run"
+    mode: 0755
+
+# Add/remove finish file
+- name: Create finish file {{ service_run_dir }}/finish
+  template:
+    src: finish.j2
+    dest: "{{ service_run_dir }}/finish"
+    mode: 0755
+  when: finish_script is defined
+- name: Remove finish file {{ service_run_dir }}/finish
+  file:
+    path: "{{ service_run_dir }}/finish"
+    state: absent
+  when: finish_script is not defined

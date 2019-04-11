@@ -1,0 +1,54 @@
+---
+- name: Prepare {{ hkcam_download_dir }} directory
+  file:
+    path: "{{ hkcam_download_dir }}"
+    state: directory
+    
+- name: Download {{ hkcam_download_url }} to {{ hkcam_download_dest }}
+  copy:
+      src: /Users/mah/Source/Code/Go/src/github.com/brutella/hkcam/hkcam-v0.0.3_linux_armhf.tar.gz
+      dest: "{{ hkcam_download_dir }}"
+      owner: pi
+      group: pi
+      mode: 0644
+  # get_url:
+  #    url: "{{ hkcam_download_url }}"
+  #    dest: "{{ hkcam_download_dest }}"
+  register: pkg_download
+
+- name: Extract {{ hkcam_download_dest }} to {{ hkcam_download_dir }}
+  unarchive:
+    src: "{{ pkg_download.dest }}"
+    dest: "{{ hkcam_download_dir }}"
+    remote_src: true
+    list_files: true
+  register: unarchived
+
+- name: Define extracted folder
+  set_fact: unarchived_dir="{{ hkcam_download_dir }}/{{ unarchived.files[0] | dirname }}"
+- name: Copy {{ unarchived_dir }}/usr to /usr
+  shell: cp -rp {{ unarchived_dir }}/usr/* /usr
+ 
+- name: Ensure that {{ hkcam_data_dir }} exists
+  file: path={{ hkcam_data_dir }} mode=0755 state=directory
+
+# FIXME Use separate user to execute hkcam. It doesn't work because the user doesn't have permissions to access */dev/video0* even though being in the *video* group.
+# - name: Create hkcam user
+#   user:
+#     name: hkcam
+#     state: present
+#     system: true
+#
+# - name: Add user to video group
+#   user:
+#     name: hkcam
+#     groups: video
+#     append: yes
+#
+# - name: Change permission of data directory
+#   file:
+#     dest: "{{ hkcam_data_dir }}"
+#     owner: hkcam
+#     group: hkcam
+#     mode: 0755
+#     recurse: true

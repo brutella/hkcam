@@ -1,0 +1,40 @@
+---
+- name: Define service directory
+  set_fact:
+    service_run_dir: "{{ runit_services_dir }}/{{ service_name }}"
+
+- name: Define supervised directory
+  set_fact:
+    service_runsvdir_dir: "{{ runit_runsvdir_dir }}/{{ service_name }}"
+
+- name: Check for service directory
+  stat:
+    path: "{{ service_run_dir }}"
+  register: p
+
+- assert:
+    that: p.stat.exists
+    fail_msg: "{{ service_run_dir }} does not exist"
+
+- assert:
+    that: p.stat.isdir
+    fail_msg: "{{ service_run_dir }} is not a directory"
+
+- name: Check for supervised directory
+  stat:
+    path: "{{ service_runsvdir_dir }}"
+  register: p
+
+- name: Enable {{ service_name }} service
+  file:
+    src: "{{ runit_services_dir }}/{{ service_name }}"
+    dest: "{{ runit_runsvdir_dir }}/{{ service_name }}"
+    state: link
+  when: enabled and p.stat.exists == false
+
+- name: Disable {{ service_name }} service
+  file:
+    src: "{{ runit_services_dir }}/{{ service_name }}"
+    dest: "{{ runit_runsvdir_dir }}/{{ service_name }}"
+    state: absent
+  when: enabled == False and p.stat.exists

@@ -1,0 +1,14 @@
+---
+- include: install.yml
+
+- include: add.yml
+  when: service_name is defined
+
+- include: enabled.yml
+  when: enabled is defined and service_name is defined
+
+- include: envs.yml
+  when: envs is defined and service_name is defined
+
+- include: state.yml
+  when: state is defined and service_name is defined

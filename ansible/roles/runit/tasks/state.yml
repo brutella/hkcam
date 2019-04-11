@@ -1,0 +1,12 @@
+---
+- name: Starting {{ service_name }} service
+  shell: sv up {{ service_name }}
+  when: state == "started"
+
+- name: Stopping {{ service_name }} service
+  shell: sv down {{ service_name }}
+  when: state == "stopped"
+
+- name: Restarting {{ service_name }} service
+  shell: sv restart {{ service_name }}
+  when: state == "restarted"

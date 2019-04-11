@@ -1,0 +1,16 @@
+---
+- hosts: rpi
+  user: pi
+  become: true
+  roles:
+    - role: hkcam
+      disable_camera_led: false
+      enabled: true
+  tasks:    
+    - name: Reboot
+      changed_when: false
+      reboot:
+        reboot_timeout: 200
+    - name: Ping raspberrypi.local
+      changed_when: false
+      shell: ping -c 1 -i 5 raspberrypi.local

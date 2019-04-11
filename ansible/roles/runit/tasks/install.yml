@@ -1,0 +1,36 @@
+---
+- name: Install runit
+  apt:
+    name: runit
+    state: present
+  
+- name: Ensure that {{ runit_services_dir }} exists
+  file: path={{ runit_services_dir }} mode=0755 state=directory
+
+- name: Ensure that {{ runit_runsvdir_dir }} exists
+  file: path={{ runit_runsvdir_dir }} mode=0755 state=directory
+
+- name: Check if {{ runit_startup_file }} exists
+  stat: path={{ runit_startup_file }} get_md5=no get_checksum=no
+  register: file
+
+- name: Create startup script at {{ runit_startup_file }}
+  when: file.stat.exists == false
+  template:
+    src: runsvdir-start.j2
+    dest: "{{ runit_startup_file }}"
+    mode: 0755
+
+- name: Ensure that runit is launched from /etc/rc.local
+  shell: cat /etc/rc.local | grep {{ runit_startup_file }}
+  args:
+      warn: false # prevent warning message
+  register: check
+  failed_when: false # never fails
+  changed_when: false # never changes
+
+- name: Add line to launch runit on startup
+  shell: sed -i -e '$i {{ runit_startup_file }} &\n' /etc/rc.local
+  args:
+      warn: false
+  when: check.rc != 0
