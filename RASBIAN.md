@@ -81,8 +81,8 @@ sudo su
 sv stop hkcam
 
 # delete hkcam data
-rm -rf /var/lib/hkcam
-rm -rf /var/log/hkcam
+rm -rf /var/lib/hkcam/*
+rm -rf /var/log/hkcam/*
 
 # delete wifi password
 sh -c "echo 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
