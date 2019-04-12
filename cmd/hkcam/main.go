@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	dnslog "github.com/brutella/dnssd/log"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/log"
@@ -47,9 +48,10 @@ func main() {
 	if *verbose {
 		log.Debug.Enable()
 		ffmpeg.EnableVerboseLogging()
+		dnslog.Debug.Enable()
 	}
 
-	switchInfo := accessory.Info{Name: "Camera"}
+	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: "0.0.5", Manufacturer: "Matthias Hochgatterer"}
 	cam := accessory.NewCamera(switchInfo)
 
 	cfg := ffmpeg.Config{
@@ -65,7 +67,6 @@ func main() {
 
 	// Add a custom camera control service to record snapshots
 	cc := hkcam.NewCameraControl()
-	cc.SetupWithDir(*dataDir)
 	cam.Control.AddCharacteristic(cc.Assets.Characteristic)
 	cam.Control.AddCharacteristic(cc.GetAsset.Characteristic)
 	cam.Control.AddCharacteristic(cc.DeleteAssets.Characteristic)
@@ -80,6 +81,7 @@ func main() {
 		return ffmpeg.Snapshot(width, height)
 	}
 
+	cc.SetupWithDir(*dataDir)
 	cc.CameraSnapshotReq = func(width, height uint) (*image.Image, error) {
 		return ffmpeg.Snapshot(width, height)
 	}

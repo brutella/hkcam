@@ -53,13 +53,13 @@ brew install go
 
 If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi ($25) with attached camera module ($20). 
 
-#### Pre-configured Rasbian  Image
+#### Pre-configured Raspbian  Image
 
-You can use a pre-configured Rasbian Stretch Lite image, where everything is already configured.
+You can use a pre-configured Raspbian Stretch Lite image, where everything is already configured.
 
 You only need to 
 
-1. download the [Rasbian image](https://github.com/brutella/hkcam/releases/download/v0.0.3/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.3.gz) and copy onto an sd card
+1. download the [Raspbian image](https://github.com/brutella/hkcam/releases/download/v0.0.3/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.3.gz) and copy onto an sd card
 
 2. install [Etcher.app](https://www.balena.io/etcher/) and flash the downloaded image onto your sd card.
 <img alt="Services" src="_img/etcher.png?raw=true"/>
@@ -78,7 +78,7 @@ You only need to
 > diskutil unmountDisk /dev/rdisk3
 > 
 > # copy image on disk3
-> sudo dd bs=1m if=~/Downloads/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.3.img of=/dev/rdisk3 conv=sync
+> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.3.img of=/dev/rdisk3 conv=sync
 > ```
 
 3. add your WiFi credentials so that the Raspberry Pi can connect you WiFi
@@ -108,7 +108,7 @@ The easiest way to get started is to
 
 1. configure your Raspberry Pi
 
-- install [Rasbian](https://www.raspberrypi.org/downloads/raspbian/) 
+- install [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) 
 - [enable ssh](https://gist.github.com/brutella/0780479ceefc5d25a805b86ea795a3c6) (and WiFi if needed)
 - connect a camera module
 

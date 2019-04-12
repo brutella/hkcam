@@ -7,5 +7,5 @@
 // HomeKit supports multiple video codecs but h264 is mandatory. So make sure that a h264 decoder for ffmpeg is installed too.
 // Audio streaming is currently not supported.
 //
-// If you are running a RPi with Rasbian, it is recommended to use a v4l2 loopback device instead of access the camera via `/dev/video0` directly.
+// If you are running a RPi with Raspbian, it is recommended to use a v4l2 loopback device instead of access the camera via `/dev/video0` directly.
 package ffmpeg

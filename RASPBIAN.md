@@ -20,7 +20,7 @@ sudo diskutil eraseDisk FAT32 <name> MBRFormat /dev/disk3
 sudo diskutil zeroDisk /dev/disk3
 ```
 
-**Install Rasbian on macOS**
+**Install Raspbian on macOS**
 ```sh
 sudo dd if=~/Downloads/2018-11-13-raspbian-stretch-lite.img of=/dev/rdisk3 bs=1m
 ```
@@ -35,11 +35,11 @@ sudo dd if=/dev/sda | gzip > image.img.gz bs=1M
 gzip -dc image.img.gz | sudo dd of=/dev/sda bs=1M
 ```
 
-# Create a custom Rasbian Stretch image
+# Create a custom Raspbian Stretch image
 
 1. configure Raspberry Pi
 
-- install [Rasbian](https://www.raspberrypi.org/downloads/raspbian/) 
+- install [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) 
 - enable ssh
 ```sh
 touch /Volumes/boot/ssh
@@ -81,7 +81,7 @@ sudo su
 sv stop hkcam
 
 # delete hkcam data
-rm -rf /var/lib/hkcam/*
+rm -rf /var/lib/hkcam/data/*
 rm -rf /var/log/hkcam/*
 
 # delete wifi password
@@ -100,7 +100,6 @@ shutdown now
 5. put sd card into another linux machine
 6. resize sd card
 ```sh
-apt-get update && apt-get install parted
 # shrink root file system to a minimum (-M)
 e2fsck -f /dev/sda2
 resize2fs -M /dev/sda2
