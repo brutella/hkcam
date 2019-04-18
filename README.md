@@ -59,7 +59,10 @@ You can use a pre-configured Raspbian Stretch Lite image, where everything is al
 
 You only need to 
 
-1. download the [Raspbian image](https://github.com/brutella/hkcam/releases/download/v0.0.3/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.3.gz) and copy onto an sd card
+1. download the pre-configured Raspbian image and copy onto an sd card
+
+- [Raspberry Pi 1 , Zero](https://github.com/brutella/hkcam/releases/download/v0.0.5/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.5-armv6.img.zip)
+- [Raspberry Pi 2, 3](https://github.com/brutella/hkcam/releases/download/v0.0.5/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.5-armv7.img.zip)
 
 2. install [Etcher.app](https://www.balena.io/etcher/) and flash the downloaded image onto your sd card.
 <img alt="Services" src="_img/etcher.png?raw=true"/>
@@ -147,11 +150,6 @@ After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 
 - I recommend to change the password of the `pi` user, once you have configured your Raspberry Pi.
 - If you want to have multiple cameras on your network, you have to make sure that the hostnames are unqiue. By default the hostname of the Raspberry Pi is `raspberrypi.local`.
-
-## TODO
-
-- [ ] Support audio
-- [ ] Implement self-update mechanism
 
 # Contact
 
