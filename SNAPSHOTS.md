@@ -10,14 +10,14 @@ You can then access them via HomeKit.
 
 Taking snapshots is an essential feature of any security camera.
 For example you want to take a snapshot once motion is detected in room.
-But there are currently no IP cameras which supports that via HomeKit.
+But there are currently no IP cameras which support that via HomeKit.
 
 `hkcam` implements *Persistent Snapshots* with custom HomeKit characteristics.
 This means you can use this feature in HomeKit scenes and automations.
 
 ## Custom Characteristics
 
-The following characteristics are used to take, get and delete snapshots.
+The following characteristics are used to handle snapshots.
 
 - [TakeSnapshot](/take_snapshot.go) takes a snapshot.
 - [Assets](/assets.go) returns an index of all snapshots as JSON.
