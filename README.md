@@ -8,7 +8,7 @@ In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHO
 *Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
 You can then access them via HomeKit.
 
-*Persistent Snapshots* is currently supported by my [Home](https://hochgatterer.me/home) app, 
+*Persistent Snapshots* is currently supported by [Home 3](https://hochgatterer.me/home), 
 as you can see from the following screenshots.
 
 | Services | Live Streaming | List of Snapshots |
@@ -86,7 +86,7 @@ You only need to
 
 3. add your WiFi credentials so that the Raspberry Pi can connect you WiFi
 
-- create a new text file at `/Volumes/boot/wpa_supplicant.conf` with the followig content
+- create a new text file at `/Volumes/boot/wpa_supplicant.conf` with the following content
 ```sh
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
