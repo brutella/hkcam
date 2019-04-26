@@ -4,26 +4,11 @@
 It uses `ffmpeg` to access the camera stream and publishes the stream to HomeKit using [hc](https://github.com/brutella/hc).
 The camera stream can be viewed in a HomeKit app. For example my [Home](https://hochgatterer.me/home) app works perfectly with `hkcam`.
 
-In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHOTS.md).
-*Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
-You can then access them via HomeKit.
-
-*Persistent Snapshots* is currently supported by [Home 3](https://hochgatterer.me/home), 
-as you can see from the following screenshots.
-
-| Services | Live Streaming | List of Snapshots |
-|--------- | -------------- | ----------------- |
-| <img alt="Services" src="_img/services.jpg?raw=true" width="280" /> | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> |
-
-| Snapshot | Automation | 
-| --------------| -------------- |
-| <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> | <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
-
 ## Features
 
 - Live streaming via HomeKit
 - Works with any HomeKit app
-- [Persistent Snapshots](/SNAPSHOTS.md)
+- [Persistent Snapshots](#persistent-snapshots)
 - Completely written in Go
 - Runs on multiple platforms (Linux, macOS)
 
@@ -150,6 +135,23 @@ After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 
 - I recommend to change the password of the `pi` user, once you have configured your Raspberry Pi.
 - If you want to have multiple cameras on your network, you have to make sure that the hostnames are unqiue. By default the hostname of the Raspberry Pi is `raspberrypi.local`.
+
+# Persistent Snapshots
+
+In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHOTS.md).
+*Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
+You can then access them via HomeKit.
+
+*Persistent Snapshots* is currently supported by [Home 3](https://hochgatterer.me/home), 
+as you can see from the following screenshots.
+
+| Services | Live Streaming | List of Snapshots |
+|--------- | -------------- | ----------------- |
+| <img alt="Services" src="_img/services.jpg?raw=true" width="280" /> | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> |
+
+| Snapshot | Automation | 
+| --------------| -------------- |
+| <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> | <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
 
 # Contact
 
