@@ -142,7 +142,7 @@ In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHO
 *Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
 You can then access them via HomeKit.
 
-*Persistent Snapshots* is currently supported by [Home 3](https://hochgatterer.me/home), 
+*Persistent Snapshots* are currently supported by [Home 3](https://hochgatterer.me/home), 
 as you can see from the following screenshots.
 
 | Services | Live Streaming | List of Snapshots |
