@@ -8,6 +8,7 @@ The camera stream can be viewed in a HomeKit app. For example my [Home](https://
 
 - Live streaming via HomeKit
 - Works with any HomeKit app
+- [3D-Printed Enclosure](#enclosure)
 - [Persistent Snapshots](#persistent-snapshots)
 - Completely written in Go
 - Runs on multiple platforms (Linux, macOS)
@@ -143,6 +144,16 @@ After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 **Debugging**
 
 If experience issues with the hkcam daemon, you can find log outputs at `/var/log/hkcam/current`.
+
+# Enclosure
+
+<img alt="Desk mount" src="_img/enclosure-desk.jpg?raw=true" width="320" />
+<img alt="Wall mount" src="_img/enclosure-wall.jpg?raw=true" width="320" />
+
+The 3D-printed enclosure is designed for a Raspberry Pi Zero W and standard camera module.
+You can use a stand to put the camera on a desk, or combine it with brackets of the [Articulating Raspberry Pi Camera Mount]() to mount it on a wall.
+
+The 3D-printed parts are available as STL files [here](https://github.com/brutella/hkcam/enclosure).
 
 # Persistent Snapshots
 
