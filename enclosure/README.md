@@ -32,7 +32,7 @@ I print all parts on my Prusa MK3 with PLA. I'm using a `0.20mm` layer height an
     </thead>
     <tbody>
         <tr>
-            <td><img alt="Desk mount" src="_img/enclosure-desk.jpg?raw=true" width="320" /></td>
+            <td><img alt="Desk mount" src="../_img/enclosure-desk.jpg?raw=true" width="320" /></td>
             <td>
                 <ul>
                     <li>1 Body in black</li>
@@ -42,7 +42,7 @@ I print all parts on my Prusa MK3 with PLA. I'm using a `0.20mm` layer height an
             </td>
         </tr>
         <tr>
-            <td><img alt="Wall mount" src="_img/enclosure-wall.jpg?raw=true" width="320" /></td>
+            <td><img alt="Wall mount" src="../_img/enclosure-wall.jpg?raw=true" width="320" /></td>
             <td>
                 <ul>
                     <li>1 Body in black</li>
