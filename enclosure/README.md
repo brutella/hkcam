@@ -8,7 +8,7 @@ I print all parts on my Prusa MK3 with PLA. I'm using a `0.20mm` layer height an
 
 **HKCam Enclosure**
 
-- [Body.stl](./Body.stl) – housing for a Raspberry Pi Zero W and camera module (with support)
+- [Body_support.stl](./Body_support.stl) – housing for a Raspberry Pi Zero W and camera module (with support)
 - [Lid.stl](./Lid.stl) – lid which snap-fits onto the body
 - [Stand.stl](./Stand.stl) – a stand which can be attached to the body at the bottom
 - [Wall Mount.stl](./WallMount.stl) – wall mount which can be used in combination with brackets of the [Articulating Raspberry Pi Camera Mount](https://www.thingiverse.com/thing:3114849)
