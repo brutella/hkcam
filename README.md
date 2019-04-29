@@ -36,7 +36,7 @@ brew install go
 
 ### Raspberry Pi
 
-If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi ($25) with attached camera module ($20). 
+If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi with attached camera module. 
 
 #### Pre-configured Raspbian  Image
 
@@ -50,7 +50,7 @@ You only need to
 - [Raspberry Pi 2, 3](https://github.com/brutella/hkcam/releases/download/v0.0.5/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.5-armv7.img.zip)
 
 2. install [Etcher.app](https://www.balena.io/etcher/) and flash the downloaded image onto your sd card.
-<img alt="Services" src="_img/etcher.png?raw=true"/>
+<img alt="Etcher.app" src="_img/etcher.png?raw=true"/>
 
 > You can do the same on the command line as well.
 > 
@@ -66,10 +66,10 @@ You only need to
 > diskutil unmountDisk /dev/rdisk3
 > 
 > # copy image on disk3
-> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.3.img of=/dev/rdisk3 conv=sync
+> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.5.img of=/dev/rdisk3 conv=sync
 > ```
 
-3. add your WiFi credentials so that the Raspberry Pi can connect you WiFi
+3. add your WiFi credentials so that the Raspberry Pi can connect to your WiFi
 
 - create a new text file at `/Volumes/boot/wpa_supplicant.conf` with the following content
 ```sh
@@ -84,6 +84,9 @@ psk="<password>"
 - replace `<ssid>` with the name of your WiFi, and `<password>` with the WiFi password.
     
 4. insert the sd card into your Raspberry Pi and power it up.
+(After a reboot it may take up to several minutes until the camera is accessible via HomeKit – see [issue #136](https://github.com/brutella/hc/issues/136).)
+
+5. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
 
 
 #### Manual Configuration
@@ -135,6 +138,11 @@ After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 
 - I recommend to change the password of the `pi` user, once you have configured your Raspberry Pi.
 - If you want to have multiple cameras on your network, you have to make sure that the hostnames are unqiue. By default the hostname of the Raspberry Pi is `raspberrypi.local`.
+- SSH is enabled in the hkcam image. You may want to disable it.
+
+**Debugging**
+
+If experience issues with the hkcam daemon, you can find log outputs at `/var/log/hkcam/current`.
 
 # Persistent Snapshots
 
