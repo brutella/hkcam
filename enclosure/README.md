@@ -21,3 +21,39 @@ I print all parts on my Prusa MK3 with PLA. I'm using a `0.20mm` layer height an
 - [mfLink_support.stl](./mfLink_support.stl) – male-to-female link (with support)
 
 > [Articulating Raspberry Pi Camera Mount for Prusa MK3 and MK2](https://www.thingiverse.com/thing:3114849) by [sneaks](https://www.thingiverse.com/sneaks) is licensed under the [Creative Commons - Attribution](http://creativecommons.org/licenses/by/3.0/) license.
+
+<table>
+    <caption>Enclosure Examples</caption>
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Parts</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><img alt="Desk mount" src="_img/enclosure-desk.jpg?raw=true" width="320" /></td>
+            <td>
+                <ul>
+                    <li>1 Body in black</li>
+                    <li>1 Lid in yellow</li>
+                    <li>1 Stand in black</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><img alt="Wall mount" src="_img/enclosure-wall.jpg?raw=true" width="320" /></td>
+            <td>
+                <ul>
+                    <li>1 Body in black</li>
+                    <li>1 Lid in yellow</li>
+                    <li>1 Wall Mount in black</li>
+                    <li>3 Bolts in yellow</li>
+                    <li>2 Nuts in yellow</li>
+                    <li>1 mfLink_90_support in black</li>
+                    <li>1 ffLink_90_support in black</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
