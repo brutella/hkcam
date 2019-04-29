@@ -153,7 +153,7 @@ If experience issues with the hkcam daemon, you can find log outputs at `/var/lo
 The 3D-printed enclosure is designed for a Raspberry Pi Zero W and standard camera module.
 You can use a stand to put the camera on a desk, or combine it with brackets of the [Articulating Raspberry Pi Camera Mount]() to mount it on a wall.
 
-The 3D-printed parts are available as STL files [here](https://github.com/brutella/hkcam/enclosure).
+The 3D-printed parts are available as STL files [here](https://github.com/brutella/hkcam/tree/master/enclosure).
 
 # Persistent Snapshots
 
