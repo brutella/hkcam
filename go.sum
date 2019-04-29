@@ -2,8 +2,8 @@ github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412 h1:w1UutsfOrms1J05zt7I
 github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412/go.mod h1:WPjqKcmVOxf0XSf3YxCJs6N6AOSrOx3obionmG7T0y0=
 github.com/brutella/dnssd v1.1.0 h1:kJdLHbmBcYHwdmApjejMnOFxQsqfFhgH5rLPkvMy0JE=
 github.com/brutella/dnssd v1.1.0/go.mod h1:FiUea3FfCnV1wi78S9exUgWrQfkILjydmuUcX6/jbgc=
-github.com/brutella/hc v1.0.0 h1:vwV4OCBSJEj55YCLUuHGUg4dv6CF0kiQJgZZqK6IBhk=
-github.com/brutella/hc v1.0.0/go.mod h1:+2Oh6uBFo8fFD6YxUWbYc68MGtLCoMYzZS7I9r0yq+E=
+github.com/brutella/hc v1.1.0 h1:RolOVQ5af1uCCSMdYQ+DAXjOufFrLWXxzA1yzayuYHI=
+github.com/brutella/hc v1.1.0/go.mod h1:+2Oh6uBFo8fFD6YxUWbYc68MGtLCoMYzZS7I9r0yq+E=
 github.com/gosexy/to v0.0.0-20141221203644-c20e083e3123 h1:6Q7VB4v0aEgIE6BtsbJhEH0KgFE0f+FHAxXePQp9Klc=
 github.com/gosexy/to v0.0.0-20141221203644-c20e083e3123/go.mod h1:oQuuq9ZkoRpy+2mhINlY3ZrwgywR77yPXmFpP6vCr/w=
 github.com/miekg/dns v1.1.1 h1:DVkblRdiScEnEr0LR9nTnEQqHYycjkXW9bOjd+2EL2o=
