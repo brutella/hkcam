@@ -8,6 +8,7 @@ import (
 	"github.com/brutella/hc/service"
 	"github.com/brutella/hc/tlv8"
 	"net"
+	"reflect"
 
 	"github.com/brutella/hkcam/ffmpeg"
 )
@@ -89,14 +90,8 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 
 		log.Debug.Printf("%+v\n", req)
 
-		// respond with the IP address to which the request was sent to
-		ip := conn.LocalAddr().(*net.TCPAddr).IP
-		var ipVersion = rtp.IPAddrVersionv4
-		if ip.To4() == nil {
-			ipVersion = rtp.IPAddrVersionv6
-		}
-
-		if ipVersion != req.ControllerAddr.IPVersion {
+		ip := localIPForConnection(conn, req.ControllerAddr.IPVersion)
+		if ip == nil {
 			log.Info.Println("No IP version", req.ControllerAddr.IPVersion)
 			return
 		}
@@ -109,7 +104,7 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 			SessionId: req.SessionId,
 			Status:    rtp.SessionStatusSuccess,
 			AccessoryAddr: rtp.Addr{
-				IPVersion:    ipVersion,
+				IPVersion:    req.ControllerAddr.IPVersion,
 				IPAddr:       ip.String(),
 				VideoRtpPort: req.ControllerAddr.VideoRtpPort,
 				AudioRtpPort: req.ControllerAddr.AudioRtpPort,
@@ -127,6 +122,60 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 		// After a write, the characteristic should contain a response
 		setTLV8Payload(m.SetupEndpoints.Bytes, resp)
 	})
+}
+
+// localIPForConnection returns the ip address of the interface at which the connection was established.
+func localIPForConnection(conn net.Conn, version uint8) net.IP {
+	host, _, err := net.SplitHostPort(conn.LocalAddr().String())
+	if err != nil {
+		log.Debug.Println(err)
+		return nil
+	}
+
+	ip := net.ParseIP(host)
+	if ip == nil {
+		log.Debug.Println("unable to parse ip", host)
+		return nil
+	}
+
+	ifaces, err := net.Interfaces()
+	if err != nil {
+		log.Debug.Println(err)
+		return nil
+	}
+
+	for _, iface := range ifaces {
+		addrs, err := iface.Addrs()
+		if err != nil {
+			continue
+		}
+
+		for _, addr := range addrs {
+			addrIP, _, err := net.ParseCIDR(addr.String())
+			if err != nil {
+				log.Debug.Println(err)
+				continue
+			}
+
+			log.Debug.Printf("%+v == %+v\n", addrIP, ip)
+			if reflect.DeepEqual(addrIP, ip) {
+				switch version {
+				case rtp.IPAddrVersionv4:
+					if ip.To4() != nil {
+						return ip
+					}
+				case rtp.IPAddrVersionv6:
+					if ip.To16() != nil {
+						return ip
+					}
+				default:
+					break
+				}
+			}
+		}
+	}
+
+	return nil
 }
 
 func setTLV8Payload(c *characteristic.Bytes, v interface{}) {
