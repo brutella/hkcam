@@ -45,9 +45,8 @@ You can use a pre-configured Raspbian Stretch Lite image, where everything is al
 
 You only need to 
 
-1. download the pre-configured Raspbian image and copy onto an sd card 
-
-- [Download Link](https://github.com/brutella/hkcam/releases/download/v0.0.6/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.6-armv6.img.zip)
+1. download the pre-configured Raspbian image and copy onto an sd card – [download](https://github.com/brutella/hkcam/releases/download/v0.0.6/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.6-armv6.img.zip)
+**Note**: This image only works on a Raspberry Pi Zero
 
 2. install [Etcher.app](https://www.balena.io/etcher/) and flash the downloaded image onto your sd card.
 <img alt="Etcher.app" src="_img/etcher.png?raw=true"/>
