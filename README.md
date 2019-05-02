@@ -47,8 +47,8 @@ You only need to
 
 1. download the pre-configured Raspbian image and copy onto an sd card
 
-- [Raspberry Pi 1 , Zero](https://github.com/brutella/hkcam/releases/download/v0.0.5/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.5-armv6.img.zip)
-- [Raspberry Pi 2, 3](https://github.com/brutella/hkcam/releases/download/v0.0.5/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.5-armv7.img.zip)
+- [Raspberry Pi 1 , Zero](https://github.com/brutella/hkcam/releases/download/v0.0.6/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.6-armv6.img.zip)
+- [Raspberry Pi 2, 3](https://github.com/brutella/hkcam/releases/download/v0.0.6/rasbian-stretch-lite-2018-11-13-hkcam-v0.0.6-armv7.img.zip)
 
 2. install [Etcher.app](https://www.balena.io/etcher/) and flash the downloaded image onto your sd card.
 <img alt="Etcher.app" src="_img/etcher.png?raw=true"/>
@@ -67,7 +67,7 @@ You only need to
 > diskutil unmountDisk /dev/rdisk3
 > 
 > # copy image on disk3
-> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.5.img of=/dev/rdisk3 conv=sync
+> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.6.img of=/dev/rdisk3 conv=sync
 > ```
 
 3. add your WiFi credentials so that the Raspberry Pi can connect to your WiFi

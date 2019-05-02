@@ -5,15 +5,15 @@
     state: directory
     
 - name: Download {{ hkcam_download_url }} to {{ hkcam_download_dest }}
-  copy:
-      src: /Users/mah/Source/Code/Go/src/github.com/brutella/hkcam/{{ hkcam_download_file_name }}
-      dest: "{{ hkcam_download_dir }}"
-      owner: pi
-      group: pi
-      mode: 0644
-  # get_url:
-  #    url: "{{ hkcam_download_url }}"
-  #    dest: "{{ hkcam_download_dest }}"
+  # copy:
+  #     src: /Users/mah/Source/Code/Go/src/github.com/brutella/hkcam/{{ hkcam_download_file_name }}
+  #     dest: "{{ hkcam_download_dir }}"
+  #     owner: pi
+  #     group: pi
+  #     mode: 0644
+  get_url:
+     url: "{{ hkcam_download_url }}"
+     dest: "{{ hkcam_download_dest }}"
   register: pkg_download
 
 - name: Extract {{ hkcam_download_dest }} to {{ hkcam_download_dir }}

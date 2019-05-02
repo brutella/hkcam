@@ -1,5 +1,5 @@
 ---
-hkcam_version: 'v0.0.5'
+hkcam_version: 'v0.0.6'
 hkcam_download_file_name: hkcam-{{ hkcam_version }}_linux_armhf.tar.gz
 hkcam_download_url: https://github.com/brutella/hkcam/releases/download/{{ hkcam_version }}/{{ hkcam_download_file_name }}
 hkcam_download_dir: /tmp

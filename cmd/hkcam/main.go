@@ -51,7 +51,7 @@ func main() {
 		dnslog.Debug.Enable()
 	}
 
-	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: "0.0.5", Manufacturer: "Matthias Hochgatterer"}
+	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: "0.0.6", Manufacturer: "Matthias Hochgatterer"}
 	cam := accessory.NewCamera(switchInfo)
 
 	cfg := ffmpeg.Config{
