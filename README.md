@@ -28,11 +28,12 @@ git clone https://github.com/brutella/hkcam && cd hkcam
 2. build and run `cmd/hkcam/main.go` by running `make run` in Terminal
 3. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
 
-These steps require *git* and *go* to be installed. On macOS you can install them via Homebrew.
+These steps require *git*, *go* and *ffmpeg* to be installed. On macOS you can install them via Homebrew.
 
 ```sh
 brew install git
 brew install go
+brew install ffmpeg
 ```
 
 ### Raspberry Pi
