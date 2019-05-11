@@ -67,7 +67,7 @@ You only need to
 > diskutil unmountDisk /dev/rdisk3
 > 
 > # copy image on disk3
-> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2018-11-13-hkcam-v0.0.6.img of=/dev/rdisk3 conv=sync
+> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.6-armv6.img of=/dev/rdisk3 conv=sync
 > ```
 
 3. add your WiFi credentials so that the Raspberry Pi can connect to your WiFi
