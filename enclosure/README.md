@@ -53,6 +53,7 @@ I print all parts on my Prusa MK3 with PLA. I'm using a `0.20mm` layer height an
                     <li>2 Nuts in yellow</li>
                     <li>1 mfLink_90_support in black</li>
                     <li>1 ffLink_90_support in black</li>
+                    <li>1 Block in black</li>
                 </ul>
             </td>
         </tr>
