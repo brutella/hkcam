@@ -1,6 +1,7 @@
 package hkcam
 
 import (
+	"fmt"
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/characteristic"
 	"github.com/brutella/hc/log"
@@ -90,9 +91,14 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 
 		log.Debug.Printf("%+v\n", req)
 
-		ip := localIPForConnection(conn, req.ControllerAddr.IPVersion)
-		if ip == nil {
-			log.Info.Println("No IP version", req.ControllerAddr.IPVersion)
+		iface, err := ifaceOfConnection(conn)
+		if err != nil {
+			log.Debug.Println(err)
+			return
+		}
+		ip, err := ipAtInterface(*iface, req.ControllerAddr.IPVersion)
+		if err != nil {
+			log.Debug.Println(err)
 			return
 		}
 
@@ -124,58 +130,72 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 	})
 }
 
-// localIPForConnection returns the ip address of the interface at which the connection was established.
-func localIPForConnection(conn net.Conn, version uint8) net.IP {
-	host, _, err := net.SplitHostPort(conn.LocalAddr().String())
+func ipAtInterface(iface net.Interface, version uint8) (net.IP, error) {
+	addrs, err := iface.Addrs()
 	if err != nil {
 		log.Debug.Println(err)
-		return nil
+		return nil, err
+	}
+
+	for _, addr := range addrs {
+		ip, _, err := net.ParseCIDR(addr.String())
+		if err != nil {
+			log.Debug.Println(err)
+			continue
+		}
+
+		switch version {
+		case rtp.IPAddrVersionv4:
+			if ip.To4() != nil {
+				return ip, nil
+			}
+		case rtp.IPAddrVersionv6:
+			if ip.To16() != nil {
+				return ip, nil
+			}
+		default:
+			break
+		}
+	}
+
+	return nil, fmt.Errorf("%s: No ip address found for version %d", iface.Name, version)
+}
+
+func ifaceOfConnection(conn net.Conn) (*net.Interface, error) {
+	host, _, err := net.SplitHostPort(conn.LocalAddr().String())
+	if err != nil {
+		return nil, err
 	}
 
 	ip := net.ParseIP(host)
 	if ip == nil {
-		log.Debug.Println("unable to parse ip", host)
-		return nil
+		return nil, fmt.Errorf("unable to parse ip %s", host)
 	}
 
 	ifaces, err := net.Interfaces()
 	if err != nil {
-		log.Debug.Println(err)
-		return nil
+		return nil, err
 	}
 
 	for _, iface := range ifaces {
 		addrs, err := iface.Addrs()
 		if err != nil {
-			continue
+			return nil, err
 		}
 
 		for _, addr := range addrs {
 			addrIP, _, err := net.ParseCIDR(addr.String())
 			if err != nil {
-				log.Debug.Println(err)
-				continue
+				return nil, err
 			}
 
-			log.Debug.Printf("%+v == %+v\n", addrIP, ip)
 			if reflect.DeepEqual(addrIP, ip) {
-				switch version {
-				case rtp.IPAddrVersionv4:
-					if ip.To4() != nil {
-						return ip
-					}
-				case rtp.IPAddrVersionv6:
-					if ip.To16() != nil {
-						return ip
-					}
-				default:
-					break
-				}
+				return &iface, nil
 			}
 		}
 	}
 
-	return nil
+	return nil, fmt.Errorf("Could not find interface for connection")
 }
 
 func setTLV8Payload(c *characteristic.Bytes, v interface{}) {
