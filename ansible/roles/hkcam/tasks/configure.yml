@@ -33,10 +33,16 @@
     regexp: "^bcm2835-v4l2"
     line: "bcm2835-v4l2"
 
-- name: Install rpi-source
-  changed_when: false
-  shell: sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/bin/rpi-source && sudo chmod +x /usr/bin/rpi-source && /usr/bin/rpi-source -q --tag-update
+- name: Update packages
+  apt:
+    update_cache: yes
+    upgrade: yes
 
+- name: Reboot
+  changed_when: false
+  reboot:
+    reboot_timeout: 200
+    
 - name: Install packages
   apt:
     name: "{{ packages }}"
@@ -46,18 +52,45 @@
     - bc
     - libncurses5-dev
     - ffmpeg
+    - raspberrypi-kernel-headers
 
-- name: Install kernel source
+# Old way of installing v4l2loopback
+# - name: Install rpi-source
+#   changed_when: false
+#   shell: sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/bin/rpi-source && sudo chmod +x /usr/bin/rpi-source && /usr/bin/rpi-source -q --tag-update
+#
+# - name: Install kernel source
+#   changed_when: false
+#   shell: rpi-source
+#
+# - name: Install v4l2loopback
+#   apt:
+#     name: "{{ packages }}"
+#     state: present
+#   vars:
+#     packages:
+#     - v4l2loopback-dkms
+
+- name: Download v4l2loopback
+  get_url:
+     url: https://github.com/umlaeute/v4l2loopback/archive/v0.12.2.tar.gz
+     dest: /tmp
+  register: v4l2_pkg_download
+
+- name: Extract {{ v4l2_pkg_download }} to /tmp
+  unarchive:
+    src: "{{ v4l2_pkg_download.dest }}"
+    dest: "/tmp"
+    remote_src: true
+    list_files: true
+  register: v4l2_unarchived
+
+- name: Define extracted folder
+  set_fact: v4l2_unarchived_dir="/tmp/{{ v4l2_unarchived.files[0] | dirname }}"
+
+- name: Install v4l2loopback from source
   changed_when: false
-  shell: rpi-source
-  
-- name: Install v4l2loopback
-  apt:
-    name: "{{ packages }}"
-    state: present
-  vars:
-    packages:
-    - v4l2loopback-dkms
+  shell: cd {{ v4l2_unarchived_dir }} && make && sudo make install && depmod -a
 
 - name: Add v4l2loopback module
   lineinfile:
