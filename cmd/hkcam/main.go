@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	dnslog "github.com/brutella/dnssd/log"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/log"
@@ -48,7 +47,6 @@ func main() {
 	if *verbose {
 		log.Debug.Enable()
 		ffmpeg.EnableVerboseLogging()
-		dnslog.Debug.Enable()
 	}
 
 	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: "0.0.7", Manufacturer: "Matthias Hochgatterer"}
