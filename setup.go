@@ -10,6 +10,7 @@ import (
 	"github.com/brutella/hc/tlv8"
 	"net"
 	"reflect"
+	"strings"
 
 	"github.com/brutella/hkcam/ffmpeg"
 )
@@ -169,6 +170,15 @@ func ifaceOfConnection(conn net.Conn) (*net.Interface, error) {
 
 	ip := net.ParseIP(host)
 	if ip == nil {
+		// host might include the interface name separated by %
+		// for example fe80::e627:bec4:30b9:cb12%wlan0
+		comps := strings.Split(host, "%%")
+		if len(comps) == 2 {
+			name := comps[1]
+			log.Debug.Printf("querying interface with name %s\n", name)
+			return net.InterfaceByName(name)
+		}
+
 		return nil, fmt.Errorf("unable to parse ip %s", host)
 	}
 
