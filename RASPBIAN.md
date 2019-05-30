@@ -59,14 +59,18 @@ psk=\"$WIFI_PWD\"
 }" > /Volumes/boot/wpa_supplicant.conf
 ```
 
-2. run the `rpi` playbook
+2. copy ssh key to the Raspberry Pi
+```sh
+ssh-copy-id pi@raspberrypi.local
+```
+
+3. run the `rpi` playbook
 ```sh
 #! /bin/sh
-cd $GOPATH/src/github.com/brutella/hkcam/ansible && ansible-playbook rpi.yml -i hosts --ask-pass
-#> SSH password: raspberry
+cd $GOPATH/src/github.com/brutella/hkcam/ansible && ansible-playbook rpi.yml -i hosts
 ```
-3. check if camera works
-4. erase personal data from Raspberry Pi
+4. check if camera works
+5. erase personal data from Raspberry Pi
 
 - ssh on Raspberry Pi
 ```sh
@@ -91,14 +95,15 @@ update_config=1
 network={
 }' > /etc/wpa_supplicant/wpa_supplicant.conf"
 
-# delete content from rpi-source
-rm -rf /root/linux*
+# delete content from ansible and ssh-copy-id
+rm -rf /home/pi/.ansible/
+rm -rf ~/.ssh
 
 # shutdown
 shutdown now
 ```
-5. put sd card into another linux machine
-6. resize sd card
+6. put sd card into another linux machine
+7. resize sd card
 ```sh
 # shrink root file system to a minimum (-M)
 e2fsck -f /dev/sda2
@@ -121,7 +126,7 @@ w
 # enlarge file system
 resize2fs -p /dev/sda2
 ```
-7. create disk image until last partition end – https://serverfault.com/a/853753
+8. create disk image until last partition end – https://serverfault.com/a/853753
 ```sh
 # Determine Units and End
 fdisk -l -u=cylinders /dev/sda

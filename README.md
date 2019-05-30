@@ -46,7 +46,7 @@ You can use a pre-configured Raspbian Stretch Lite image, where everything is al
 
 You only need to 
 
-1. download the pre-configured Raspbian image and copy onto an sd card; [download](https://github.com/brutella/hkcam/releases/download/v0.0.6/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.6-armv6.img.zip)
+1. download the pre-configured Raspbian image and copy onto an sd card; [download](https://github.com/brutella/hkcam/releases/download/v0.0.7/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.7-armv6.img.zip)
 
 - **Note**: This image only works on a Raspberry Pi Zero
 
@@ -67,7 +67,7 @@ You only need to
 > diskutil unmountDisk /dev/rdisk3
 > 
 > # copy image on disk3
-> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.6-armv6.img of=/dev/rdisk3 conv=sync
+> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.7-armv6.img of=/dev/rdisk3 conv=sync
 > ```
 
 3. add your WiFi credentials so that the Raspberry Pi can connect to your WiFi
@@ -104,11 +104,17 @@ The easiest way to get started is to
 - [enable ssh](https://gist.github.com/brutella/0780479ceefc5d25a805b86ea795a3c6) (and WiFi if needed)
 - connect a camera module
 
-2. run the `rpi` playbook
+2. create ssh key and copy them to the Raspberry Pi
+```sh
+ssh-keygen
+ssh-copy-id pi@raspberrypi.local
+```
+
+3 run the `rpi` playbook
 ```sh
 cd ansible && ansible-playbook rpi.yml -i hosts --ask-pass
 ```
-3. use `raspberry` as the SSH password
+
 4. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
 
 These steps require *ansible* to be installed. On macOS you can install it via Homebrew.
