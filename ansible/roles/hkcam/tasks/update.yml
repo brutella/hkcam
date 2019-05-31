@@ -1,0 +1,14 @@
+---
+- name: Copy shellscript to Raspberry Pi
+  copy: 
+    src: files/update_hkcam.sh
+    dest: "{{ hkcam_download_dir }}"
+    mode: u=rwx,g=rwx,o=r
+
+- name: Make an cronjob 
+  cron:
+    name: "Cronjob for update"
+    minute: "0"
+    hour: "0"
+    job: "{{ hkcam_download_dir }}/update.sh"
+
