@@ -172,7 +172,7 @@ func ifaceOfConnection(conn net.Conn) (*net.Interface, error) {
 	if ip == nil {
 		// host might include the interface name separated by %
 		// for example fe80::e627:bec4:30b9:cb12%wlan0
-		comps := strings.Split(host, "%%")
+		comps := strings.Split(host, "%")
 		if len(comps) == 2 {
 			name := comps[1]
 			log.Debug.Printf("querying interface with name %s\n", name)
