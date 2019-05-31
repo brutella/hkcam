@@ -10,5 +10,5 @@
     name: "Cronjob for update"
     minute: "0"
     hour: "0"
-    job: "{{ hkcam_download_dir }}/update.sh"
+    job: "{{ hkcam_download_dir }}/update_hkcam.sh"
 
