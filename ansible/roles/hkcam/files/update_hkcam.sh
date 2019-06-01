@@ -9,7 +9,7 @@ if [ $CURRENT != ${LATEST#?} ]; then
   wget -O hkcam-latest_linux_armhf.tar.gz https://github.com/brutella/hkcam/releases/download/${LATEST}/hkcam-${LATEST}_linux_armhf.tar.gz
   tar -xvf hkcam-latest_linux_armhf.tar.gz && rm -rf hkcam-latest_linux_armhf.tar.gz
   sudo sv stop hkcam
-  sudo mv hkcam-linux_armhf/usr/bin/hkcam /usr/bin && rm -rf hkcam-latest_linux_armhf
+  sudo mv hkcam-latest_linux_armhf/usr/bin/hkcam /usr/bin && rm -rf hkcam-latest_linux_armhf
   sudo sv start hkcam
   sudo sv status hkcam
   echo "Update to version $LATEST done."
