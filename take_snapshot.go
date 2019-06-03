@@ -4,6 +4,7 @@ import (
 	"github.com/brutella/hc/characteristic"
 )
 
+// TypeTakeSnapshot ...
 const TypeTakeSnapshot = "E8AEE54F-6E4B-46D8-85B2-FECE188FDB08"
 
 // TakeSnapshot is used to take a snapshot.
@@ -13,6 +14,7 @@ type TakeSnapshot struct {
 	*characteristic.Bool
 }
 
+// NewTakeSnapshot ...
 func NewTakeSnapshot() *TakeSnapshot {
 	b := characteristic.NewBool(TypeTakeSnapshot)
 	b.Description = "Take Snapshot"

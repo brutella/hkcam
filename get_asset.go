@@ -4,6 +4,7 @@ import (
 	"github.com/brutella/hc/characteristic"
 )
 
+// TypeGetAsset ... 
 const TypeGetAsset = "6A6C39F5-67F0-4BE1-BA9D-E56BD27C9606"
 
 // GetAsset is used to get the raw data of an asset.
@@ -14,6 +15,7 @@ type GetAsset struct {
 	*characteristic.Bytes
 }
 
+// NewGetAsset ...
 func NewGetAsset() *GetAsset {
 	b := characteristic.NewBytes(TypeGetAsset)
 	b.Perms = []string{characteristic.PermRead, characteristic.PermWrite}
@@ -22,6 +24,7 @@ func NewGetAsset() *GetAsset {
 	return &GetAsset{b}
 }
 
+// GetAssetRequest ... 
 type GetAssetRequest struct {
 	ID     string `json:"id"`
 	Width  uint   `json:"width"`
