@@ -131,6 +131,8 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 	})
 }
 
+// ipAtInterface returns the ip at iface with a specific version.
+// version is either `rtp.IPAddrVersionv4` or `rtp.IPAddrVersionv6`.
 func ipAtInterface(iface net.Interface, version uint8) (net.IP, error) {
 	addrs, err := iface.Addrs()
 	if err != nil {
@@ -162,6 +164,7 @@ func ipAtInterface(iface net.Interface, version uint8) (net.IP, error) {
 	return nil, fmt.Errorf("%s: No ip address found for version %d", iface.Name, version)
 }
 
+// ifaceOfConnection returns the network interface at which the connection was established.
 func ifaceOfConnection(conn net.Conn) (*net.Interface, error) {
 	host, _, err := net.SplitHostPort(conn.LocalAddr().String())
 	if err != nil {
@@ -169,9 +172,11 @@ func ifaceOfConnection(conn net.Conn) (*net.Interface, error) {
 	}
 
 	ip := net.ParseIP(host)
+	// 2019-06-04 (mah) ip might be nil if `host` contains the network interface name
+	// I couldn't find any documentation why v6 ip address contains the interface name
 	if ip == nil {
-		// host might include the interface name separated by %
-		// for example fe80::e627:bec4:30b9:cb12%wlan0
+		// get the interface name from the host string
+		// ex. host = "fe80::e627:bec4:30b9:cb12%wlan0"
 		comps := strings.Split(host, "%")
 		if len(comps) == 2 {
 			name := comps[1]
