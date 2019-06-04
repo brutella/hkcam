@@ -39,12 +39,12 @@ func first(ips []net.IP, filter func(net.IP) bool) net.IP {
 func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPEG, multiStream bool) {
 	status := rtp.StreamingStatus{rtp.StreamingStatusAvailable}
 	setTLV8Payload(m.StreamingStatus.Bytes, status)
-	setTLV8Payload(m.SupportedRTPConfiguration.Bytes, rtp.NewSupportedRTPConfiguration(rtp.CryptoSuite_AES_CM_128_HMAC_SHA1_80))
+	setTLV8Payload(m.SupportedRTPConfiguration.Bytes, rtp.NewConfiguration(rtp.CryptoSuite_AES_CM_128_HMAC_SHA1_80))
 	setTLV8Payload(m.SupportedVideoStreamConfiguration.Bytes, rtp.DefaultVideoStreamConfiguration())
 	setTLV8Payload(m.SupportedAudioStreamConfiguration.Bytes, rtp.DefaultAudioStreamConfiguration())
 
 	m.SelectedRTPStreamConfiguration.OnValueRemoteUpdate(func(buf []byte) {
-		var cfg rtp.SelectedRtpStreamConfiguration
+		var cfg rtp.StreamConfiguration
 		err := tlv8.Unmarshal(buf, &cfg)
 		if err != nil {
 			log.Debug.Fatalf("SelectedRTPStreamConfiguration: Could not unmarshal tlv8 data: %s\n", err)
