@@ -16,7 +16,7 @@ import (
 
 )
 
-const FirmwareRevision = "0.0.7"
+const FirmwareRevision = "0.0.8"
 
 func main() {
 
@@ -60,7 +60,7 @@ func main() {
 		ffmpeg.EnableVerboseLogging()
 	}
 
-	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: "0.0.7", Manufacturer: "Matthias Hochgatterer"}
+	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: "0.0.8", Manufacturer: "Matthias Hochgatterer"}
 	cam := accessory.NewCamera(switchInfo)
 
 	cfg := ffmpeg.Config{
