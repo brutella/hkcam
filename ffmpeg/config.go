@@ -7,5 +7,6 @@ type Config struct {
 	LoopbackFilename string
 	H264Decoder      string
 	H264Encoder      string
+	MinVideoBitrate  int
 	MultiStream      bool
 }

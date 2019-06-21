@@ -10,12 +10,14 @@ import (
 )
 
 type stream struct {
-	inputDevice   string
-	inputFilename string
-	h264Decoder   string
-	h264Encoder   string
-	req           rtp.SetupEndpoints
-	resp          rtp.SetupEndpointsResponse
+	inputDevice     string
+	inputFilename   string
+	h264Decoder     string
+	h264Encoder     string
+	minVideoBitrate int
+
+	req  rtp.SetupEndpoints
+	resp rtp.SetupEndpointsResponse
 
 	cmd *exec.Cmd
 }
@@ -39,23 +41,29 @@ func (s *stream) start(video rtp.VideoParameters, audio rtp.AudioParameters) err
 	// -vsync 2: Fixes "Frame rate very high for a muxer not efficiently supporting it."
 	// -framerate before -i specifies the framerate for the input, after -i sets it for the output https://stackoverflow.com/questions/38498599/webcam-with-ffmpeg-on-mac-selected-framerate-29-970030-is-not-supported-by-th#38549528
 
-	// ffmpeg -i input.jpg -vf scale=w=320:h=240:force_original_aspect_ratio=decrease output_320.png
 	ffmpegVideo := fmt.Sprintf("-f %s", s.inputDevice) +
 		fmt.Sprintf(" -framerate %d", s.framerate(video.Attributes)) +
 		fmt.Sprintf("%s", s.videoDecoderOption(video)) +
 		fmt.Sprintf(" -i %s", s.inputFilename) +
 		" -an" +
 		fmt.Sprintf(" -codec:v %s", s.videoEncoder(video)) +
-		" -pix_fmt yuv420p -vsync 2" +
+		" -pix_fmt yuv420p -vsync vfr" +
+
 		// height "-2" keeps the aspect ratio
 		fmt.Sprintf(" -video_size %d:-2", video.Attributes.Width) +
 		fmt.Sprintf(" -framerate %d", video.Attributes.Framerate) +
-		// 2018-08-18 (mah) Disable profile arguments because it cannot be parsed
+
+		// 2019-06-20 (mah)
+		//   Specifying profiles in h264_omx was added in ffmpeg 3.3
+		//   https://github.com/FFmpeg/FFmpeg/commit/13332504c98918447159da2a1a34e377dca360e2#diff-36301d4a4bc7200caee9fbe8e8d8cc20
+		//   hkcam currently uses ffmpeg 3.2
+		// 2018-08-18 (mah)
+		//   Disable profile arguments because it cannot be parsed
 		// [h264_omx @ 0x93a410] [Eval @ 0xbeaad160] Undefined constant or missing '(' in 'high'
 		// fmt.Sprintf(" -profile:v %s", videoProfile(video.CodecParams)) +
 		fmt.Sprintf(" -level:v %s", videoLevel(video.CodecParams)) +
-		" -f rawvideo -tune zerolatency" +
-		fmt.Sprintf(" -b:v %dk -bufsize %dk", video.RTP.Bitrate, video.RTP.Bitrate) +
+		" -f rawvideo" +
+		fmt.Sprintf(" -b:v %dk", s.videoBitrate(video)) +
 		fmt.Sprintf(" -payload_type %d", video.RTP.PayloadType) +
 		fmt.Sprintf(" -ssrc %d", s.resp.SsrcVideo) +
 		" -f rtp -srtp_out_suite AES_CM_128_HMAC_SHA1_80" +
@@ -128,6 +136,15 @@ func (s *stream) videoDecoderOption(param rtp.VideoParameters) string {
 	}
 
 	return ""
+}
+
+func (s *stream) videoBitrate(param rtp.VideoParameters) int {
+	br := int(param.RTP.Bitrate)
+	if s.minVideoBitrate > br {
+		br = s.minVideoBitrate
+	}
+
+	return br
 }
 
 // https://superuser.com/a/564007
