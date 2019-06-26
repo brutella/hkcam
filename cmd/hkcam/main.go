@@ -45,7 +45,8 @@ func main() {
 		log.Info.Fatalf("%s platform is not supported", runtime.GOOS)
 	}
 
-	var multiStream *bool = flag.Bool("multi_stream", true, "Allow mutliple clients to view the stream simultaneously")
+	var minVideoBitrate *int = flag.Int("min_video_bitrate", 0, "minimum video bit rate in kbps")
+	var multiStream *bool = flag.Bool("multi_stream", false, "Allow mutliple clients to view the stream simultaneously")
 	var dataDir *string = flag.String("data_dir", "Camera", "Path to data directory")
 	var verbose *bool = flag.Bool("verbose", true, "Verbose logging")
 	version := flag.Bool("version", false, "prints current version") 
@@ -69,6 +70,7 @@ func main() {
 		LoopbackFilename: *loopbackFilename,
 		H264Decoder:      *h264Decoder,
 		H264Encoder:      *h264Encoder,
+		MinVideoBitrate:  *minVideoBitrate,
 		MultiStream:      *multiStream,
 	}
 

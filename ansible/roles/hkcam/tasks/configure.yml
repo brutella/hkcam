@@ -42,7 +42,7 @@
   changed_when: false
   reboot:
     reboot_timeout: 200
-    
+
 - name: Install packages
   apt:
     name: "{{ packages }}"

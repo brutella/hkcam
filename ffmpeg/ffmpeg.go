@@ -62,7 +62,7 @@ func (f *ffmpeg) PrepareNewStream(req rtp.SetupEndpoints, resp rtp.SetupEndpoint
 	defer f.mutex.Unlock()
 
 	id := StreamID(req.SessionId)
-	s := &stream{f.videoInputDevice(), f.videoInputFilename(), f.cfg.H264Decoder, f.cfg.H264Encoder, req, resp, nil}
+	s := &stream{f.videoInputDevice(), f.videoInputFilename(), f.cfg.H264Decoder, f.cfg.H264Encoder, f.cfg.MinVideoBitrate, req, resp, nil}
 	f.streams[id] = s
 	return id
 }
@@ -110,7 +110,6 @@ func (f *ffmpeg) Stop(id StreamID) {
 			}
 		}
 
-		log.Debug.Println("Stopping loopback")
 		// Stop loopback if no stream is active anymore
 		f.loop.Stop()
 	}
@@ -183,7 +182,6 @@ func (f *ffmpeg) Snapshot(width, height uint) (*image.Image, error) {
 			}
 		}
 
-		log.Debug.Println("Stopping loopback")
 		// Stop loopback if no stream is active anymore
 		f.loop.Stop()
 	}

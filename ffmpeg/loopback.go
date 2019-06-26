@@ -4,6 +4,8 @@ import (
 	"os/exec"
 	"syscall"
 	"time"
+
+	"github.com/brutella/hc/log"
 )
 
 // loopback copies data from the inpute filename to the loopback filename.
@@ -32,6 +34,8 @@ func NewLoopback(inputDevice, inputFilename, loopbackFilename string) *loopback 
 // Start starts the loopback.
 func (l *loopback) Start() error {
 	if l.active == nil {
+		log.Debug.Println("Starting loopback")
+
 		cmd := l.cmd()
 		if err := cmd.Start(); err != nil {
 			return err
@@ -47,6 +51,7 @@ func (l *loopback) Start() error {
 // Stop stops the loopback.
 func (l *loopback) Stop() {
 	if l.active != nil {
+		log.Debug.Println("Stopping loopback")
 		l.active.Process.Signal(syscall.SIGINT)
 		l.active = nil
 	}
@@ -57,6 +62,8 @@ func (l *loopback) cmd() *exec.Cmd {
 	cmd := exec.Command("ffmpeg", "-f", l.inputDevice, "-i", l.inputFilename, "-codec:v", "copy", "-f", l.inputDevice, l.loopbackFilename)
 	cmd.Stdout = Stdout
 	cmd.Stderr = Stderr
+
+	log.Debug.Println(cmd)
 
 	return cmd
 }
