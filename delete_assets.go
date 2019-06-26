@@ -14,6 +14,7 @@ type DeleteAssets struct {
 	*characteristic.Bytes
 }
 
+// NewDeleteAssets ... 
 func NewDeleteAssets() *DeleteAssets {
 	b := characteristic.NewBytes(TypeDeleteAssets)
 	b.Perms = []string{characteristic.PermRead, characteristic.PermWrite}
@@ -22,6 +23,7 @@ func NewDeleteAssets() *DeleteAssets {
 	return &DeleteAssets{b}
 }
 
+// DeleteAssetsRequest ... 
 type DeleteAssetsRequest struct {
 	IDs []string `json:"ids"`
 }

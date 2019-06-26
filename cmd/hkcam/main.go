@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/log"
@@ -11,7 +13,10 @@ import (
 
 	"github.com/brutella/hkcam"
 	"github.com/brutella/hkcam/ffmpeg"
+
 )
+
+const FIRMWARE_REVISION = "0.0.8"
 
 func main() {
 
@@ -21,6 +26,7 @@ func main() {
 	var loopbackFilename *string
 	var h264Encoder *string
 	var h264Decoder *string
+
 
 	if runtime.GOOS == "linux" {
 		inputDevice = flag.String("input_device", "v4l2", "video input device")
@@ -43,14 +49,19 @@ func main() {
 	var multiStream *bool = flag.Bool("multi_stream", false, "Allow mutliple clients to view the stream simultaneously")
 	var dataDir *string = flag.String("data_dir", "Camera", "Path to data directory")
 	var verbose *bool = flag.Bool("verbose", true, "Verbose logging")
+	version := flag.Bool("version", false, "prints current version") 
 	flag.Parse()
 
+	if *version {
+		fmt.Println(FIRMWARE_REVISION)
+		os.Exit(0)
+	}
 	if *verbose {
 		log.Debug.Enable()
 		ffmpeg.EnableVerboseLogging()
 	}
 
-	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: "0.0.8", Manufacturer: "Matthias Hochgatterer"}
+	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: FIRMWARE_REVISION, Manufacturer: "Matthias Hochgatterer"}
 	cam := accessory.NewCamera(switchInfo)
 
 	cfg := ffmpeg.Config{

@@ -5,6 +5,9 @@
 - include: configure.yml
   tags: [configure]
 
+- include: update.yml
+  tags: [update]
+
 - import_role:
     name: runit
   vars:

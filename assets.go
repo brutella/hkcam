@@ -14,6 +14,7 @@ type Assets struct {
 	*characteristic.Bytes
 }
 
+// NewAssets ...  
 func NewAssets() *Assets {
 	b := characteristic.NewBytes(TypeAssets)
 	b.Perms = []string{characteristic.PermRead, characteristic.PermEvents}
@@ -23,10 +24,12 @@ func NewAssets() *Assets {
 	return &Assets{b}
 }
 
+// AssetsMetadataResponse ...
 type AssetsMetadataResponse struct {
 	Assets []CameraAssetMetadata `json:"assets"`
 }
 
+// CameraAssetMetadata ... 
 type CameraAssetMetadata struct {
 	ID   string `json:"id"`
 	Date string `json:"date"`
