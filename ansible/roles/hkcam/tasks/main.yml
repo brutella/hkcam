@@ -12,6 +12,7 @@
     run_script: |
       #!/bin/sh -e
       exec 2>&1
+      v4l2-ctl --set-fmt-video=width=1280,height=720,pixelformat=YU12
       exec hkcam --data_dir={{ hkcam_data_dir }} --verbose=true
     log_dir: /var/log/hkcam
   tags: [runit]
