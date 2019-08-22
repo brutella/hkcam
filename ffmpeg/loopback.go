@@ -1,7 +1,11 @@
 package ffmpeg
 
 import (
+	"bytes"
+	"io"
+	"os"
 	"os/exec"
+	"strings"
 	"syscall"
 	"time"
 
@@ -20,6 +24,7 @@ type loopback struct {
 	loopbackFilename string
 
 	active *exec.Cmd
+	output *bytes.Buffer
 }
 
 // NewLoopback returns a new video loopback.
@@ -40,8 +45,14 @@ func (l *loopback) Start() error {
 		if err := cmd.Start(); err != nil {
 			return err
 		}
-		// FIXME: Starting ffmpeg takes some time
-		time.Sleep(1 * time.Second)
+
+		// Starting ffmpeg takes some time
+		for !strings.Contains(l.output.String(), "frame=") {
+			log.Debug.Println("Waiting for loopback")
+			time.Sleep(1 * time.Second)
+		}
+		log.Debug.Println("Loopback active")
+
 		l.active = cmd
 	}
 
@@ -60,8 +71,11 @@ func (l *loopback) Stop() {
 // cmd returns a new command to stream video from the input file to the loopback file.
 func (l *loopback) cmd() *exec.Cmd {
 	cmd := exec.Command("ffmpeg", "-f", l.inputDevice, "-i", l.inputFilename, "-codec:v", "copy", "-f", l.inputDevice, l.loopbackFilename)
-	cmd.Stdout = Stdout
-	cmd.Stderr = Stderr
+
+	l.output = new(bytes.Buffer)
+	multiOut := io.MultiWriter(os.Stdout, l.output)
+	cmd.Stdout = multiOut
+	cmd.Stderr = multiOut
 
 	log.Debug.Println(cmd)
 
