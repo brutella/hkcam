@@ -11,6 +11,6 @@
       changed_when: false
       reboot:
         reboot_timeout: 200
-    - name: Ping raspberrypi.local
+    - name: Ping rpi
       changed_when: false
-      shell: ping -c 1 -i 5 raspberrypi.local
+      shell: ping -c 1 -i 5 {{ ansible_host }}
