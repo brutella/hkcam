@@ -73,7 +73,7 @@
 
 - name: Download v4l2loopback
   get_url:
-     url: https://github.com/umlaeute/v4l2loopback/archive/v0.12.2.tar.gz
+     url: https://github.com/umlaeute/v4l2loopback/archive/v0.12.3.tar.gz
      dest: /tmp
   register: v4l2_pkg_download
 
@@ -97,8 +97,3 @@
     dest: /etc/modules
     regexp: "^v4l2loopback"
     line: "v4l2loopback"
-
-- name: Add v4l2loopback module configuration
-  copy:
-    content: "options v4l2loopback video_nr=1"
-    dest: /etc/modprobe.d/v4l2loopback.conf
