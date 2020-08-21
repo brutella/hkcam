@@ -53,6 +53,7 @@ func (l *loopback) Stop() {
 	if l.active != nil {
 		log.Debug.Println("Stopping loopback")
 		l.active.Process.Signal(syscall.SIGINT)
+		l.active.Wait()
 		l.active = nil
 	}
 }

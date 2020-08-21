@@ -31,6 +31,7 @@ func (s *stream) stop() {
 
 	if s.cmd != nil {
 		s.cmd.Process.Signal(syscall.SIGINT)
+		s.cmd.Wait()
 		s.cmd = nil
 	}
 }
