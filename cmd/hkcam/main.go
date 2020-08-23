@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/log"
@@ -43,6 +44,8 @@ func main() {
 	var multiStream *bool = flag.Bool("multi_stream", false, "Allow mutliple clients to view the stream simultaneously")
 	var dataDir *string = flag.String("data_dir", "Camera", "Path to data directory")
 	var verbose *bool = flag.Bool("verbose", true, "Verbose logging")
+	var pin *string = flag.String("pin", "00102003", "PIN for HomeKit pairing")
+
 	flag.Parse()
 
 	if *verbose {
@@ -72,7 +75,7 @@ func main() {
 	cam.Control.AddCharacteristic(cc.DeleteAssets.Characteristic)
 	cam.Control.AddCharacteristic(cc.TakeSnapshot.Characteristic)
 
-	t, err := hc.NewIPTransport(hc.Config{StoragePath: *dataDir}, cam.Accessory)
+	t, err := hc.NewIPTransport(hc.Config{StoragePath: *dataDir, Pin: *pin}, cam.Accessory)
 	if err != nil {
 		log.Info.Panic(err)
 	}

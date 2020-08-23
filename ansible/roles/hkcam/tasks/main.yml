@@ -12,7 +12,16 @@
     run_script: |
       #!/bin/sh -e
       exec 2>&1
+
+      # Load in config settings
+      . /boot/hkcam.txt
+
+      # Default to 720p for now
       v4l2-ctl --set-fmt-video=width=1280,height=720,pixelformat=YU12
-      exec hkcam --data_dir={{ hkcam_data_dir }} --verbose=true
+      v4l2-ctl --set-ctrl=rotate=$HKCAM_ROTATION
+
+      exec hkcam --data_dir={{ hkcam_data_dir }} --verbose=true \
+      --min_video_bitrate=$HKCAM_MIN_BITRATE --multi_stream=$HKCAM_MULTI_STREAM \
+      --pin=$HKCAM_HOMEKIT_PIN
     log_dir: /var/log/hkcam
   tags: [runit]

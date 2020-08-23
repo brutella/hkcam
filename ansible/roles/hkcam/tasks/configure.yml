@@ -22,6 +22,25 @@
     line: "disable_camera_led=0"
   when: disable_camera_led == false
 
+- name: Install HKCam configuration file
+  copy:
+    dest: "/boot/hkcam.txt"
+    content: |
+      # Modify this file with the settings you want to have
+
+      # PIN used while pairing the device
+      export HKCAM_HOMEKIT_PIN=00102003
+
+      # Force a minimum bitrate on all streams.
+      # NOTE: specifying a high bit rate may cause some devices, such as the Apple Watch, to not function correctly
+      export HKCAM_MIN_BITRATE=0
+
+      # Rotate the camera view (e.g. set this to 180 if you mount your device upside down)
+      export HKCAM_ROTATION=0
+
+      # Enable multiple clients to watch the stream simultaneously
+      export HKCAM_MULTI_STREAM=false
+
 # - name: Add bcm2835 module
 #   modprobe:
 #     name: bcm2835-v4l2
