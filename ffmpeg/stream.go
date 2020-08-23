@@ -45,7 +45,7 @@ func (s *stream) start(video rtp.VideoParameters, audio rtp.AudioParameters) err
 	ffmpegVideo := fmt.Sprintf("-f %s", s.inputDevice) +
 		fmt.Sprintf(" -framerate %d", s.framerate(video.Attributes)) +
 		fmt.Sprintf("%s", s.videoDecoderOption(video)) +
-		fmt.Sprintf(" -i %s", s.inputFilename) +
+		fmt.Sprintf(" -re -i %s", s.inputFilename) +
 		" -an" +
 		fmt.Sprintf(" -codec:v %s", s.videoEncoder(video)) +
 		" -pix_fmt yuv420p -vsync vfr" +

@@ -1,7 +1,12 @@
 package ffmpeg
 
 import (
+	"bufio"
+	"errors"
+	"io"
 	"os/exec"
+	"strings"
+	"sync"
 	"syscall"
 	"time"
 
@@ -19,7 +24,9 @@ type loopback struct {
 	h264Decoder      string
 	loopbackFilename string
 
-	active *exec.Cmd
+	mutex *sync.Mutex
+	cmd   *exec.Cmd
+	out   io.ReadWriter
 }
 
 // NewLoopback returns a new video loopback.
@@ -28,21 +35,60 @@ func NewLoopback(inputDevice, inputFilename, loopbackFilename string) *loopback 
 		inputDevice:      inputDevice,
 		inputFilename:    inputFilename,
 		loopbackFilename: loopbackFilename,
+		mutex:            &sync.Mutex{},
 	}
 }
 
 // Start starts the loopback.
+// This method waits until the ffmpeg process is running.
 func (l *loopback) Start() error {
-	if l.active == nil {
-		log.Debug.Println("Starting loopback")
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 
-		cmd := l.cmd()
+	if l.cmd == nil {
+		log.Debug.Println("Starting loopback")
+		cmd := l.execCmd()
+		pr, pw := io.Pipe()
+		// cmd.Stdout = pw
+		cmd.Stderr = pw
+
 		if err := cmd.Start(); err != nil {
 			return err
 		}
-		// FIXME: Starting ffmpeg takes some time
-		time.Sleep(1 * time.Second)
-		l.active = cmd
+
+		done := make(chan struct{}, 0)
+		go func() {
+			r := bufio.NewReader(pr)
+			for {
+				line, _, err := r.ReadLine()
+				if err != nil {
+					if err == io.EOF {
+						log.Info.Println("ffmpeg: process stopped")
+					} else {
+						log.Info.Println("ffmpeg:", err)
+					}
+					return
+				}
+				log.Debug.Println(string(line))
+				if strings.Contains(string(line), "Press [q] to stop, [?] for help") {
+					log.Debug.Println("ffmpeg is now running")
+					done <- struct{}{}
+				}
+			}
+		}()
+
+		select {
+		case <-done:
+			log.Debug.Println("Loopback started")
+			l.cmd = cmd
+			return nil
+		case <-time.After(20 * time.Second):
+			err := errors.New("Loopback failed to start")
+			log.Debug.Println(err)
+			cmd.Process.Signal(syscall.SIGINT)
+			cmd.Wait()
+			return err
+		}
 	}
 
 	return nil
@@ -50,19 +96,20 @@ func (l *loopback) Start() error {
 
 // Stop stops the loopback.
 func (l *loopback) Stop() {
-	if l.active != nil {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
+
+	if l.cmd != nil {
 		log.Debug.Println("Stopping loopback")
-		l.active.Process.Signal(syscall.SIGINT)
-		l.active.Wait()
-		l.active = nil
+		l.cmd.Process.Signal(syscall.SIGINT)
+		l.cmd.Wait()
+		l.cmd = nil
 	}
 }
 
 // cmd returns a new command to stream video from the input file to the loopback file.
-func (l *loopback) cmd() *exec.Cmd {
+func (l *loopback) execCmd() *exec.Cmd {
 	cmd := exec.Command("ffmpeg", "-f", l.inputDevice, "-i", l.inputFilename, "-codec:v", "copy", "-f", l.inputDevice, l.loopbackFilename)
-	cmd.Stdout = Stdout
-	cmd.Stderr = Stderr
 
 	log.Debug.Println(cmd)
 
