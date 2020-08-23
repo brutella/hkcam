@@ -46,7 +46,7 @@ You can use a pre-configured Raspbian Stretch Lite image, where everything is al
 
 You only need to 
 
-1. download the pre-configured Raspbian image and copy onto an sd card; [download](https://github.com/brutella/hkcam/releases/download/v0.0.8/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.8-armv6.img.zip)
+1. download the pre-configured Raspbian image and copy onto an sd card; [download](https://github.com/brutella/hkcam/releases/download/v0.0.9/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.9-armv6.img.zip)
 
 - **Note**: This image only works on a Raspberry Pi Zero
 
@@ -67,7 +67,7 @@ You only need to
 > diskutil unmountDisk /dev/rdisk3
 > 
 > # copy image on disk3
-> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.8-armv6.img of=/dev/rdisk3 conv=sync
+> sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.9-armv6.img of=/dev/rdisk3 conv=sync
 > ```
 
 3. add your WiFi credentials so that the Raspberry Pi can connect to your WiFi
