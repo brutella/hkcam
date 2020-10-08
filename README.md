@@ -178,6 +178,32 @@ as you can see from the following screenshots.
 | --------------| -------------- |
 | <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> | <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
 
+
+# Advanced Configuration
+The application can be further configured using flags in the startup script. These can lead to a misconfigured system and shoud be used at your own caution.
+
+These settings can be changed in the startup script ```/etc/sv/hkcam/run```.
+
+```
+#!/bin/sh -e
+exec 2>&1
+v4l2-ctl --set-fmt-video=width=1280,height=720,pixelformat=YU12
+exec hkcam --data_dir=/var/lib/hkcam/data --verbose=true
+```
+
+| Flag | Default value | Description |
+|--------- | -------------- | ----------------- |
+| min_video_bitrate | ```0``` | minimum video bit rate in kbps|
+| multi_stream | ```false``` | "Allow mutliple clients to view the stream simultaneously|
+| data_dir | ```"Camera"``` | Path to data directory|
+| verbose | ```true```| Verbose logging|
+| pin | ```"00102003"``` | PIN for HomeKit pairing |
+| port | ```""``` | Port on which transport is reachable, random  portif empty |
+
+## Network 
+`hkcam` uses bonjour for service discovery. The port used for this ```5353```.
+The transport port is random. It is assigned by the OS. You can set a port using the ```port``` flag.
+
 # Contact
 
 Matthias Hochgatterer

@@ -45,6 +45,7 @@ func main() {
 	var dataDir *string = flag.String("data_dir", "Camera", "Path to data directory")
 	var verbose *bool = flag.Bool("verbose", true, "Verbose logging")
 	var pin *string = flag.String("pin", "00102003", "PIN for HomeKit pairing")
+	var port *string = flag.String("port", "", "Port on which transport is reachable")
 
 	flag.Parse()
 
@@ -75,7 +76,7 @@ func main() {
 	cam.Control.AddCharacteristic(cc.DeleteAssets.Characteristic)
 	cam.Control.AddCharacteristic(cc.TakeSnapshot.Characteristic)
 
-	t, err := hc.NewIPTransport(hc.Config{StoragePath: *dataDir, Pin: *pin}, cam.Accessory)
+	t, err := hc.NewIPTransport(hc.Config{StoragePath: *dataDir, Pin: *pin, Port: *port}, cam.Accessory)
 	if err != nil {
 		log.Info.Panic(err)
 	}
