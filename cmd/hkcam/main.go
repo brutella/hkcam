@@ -6,9 +6,14 @@ import (
 	"github.com/brutella/hc"
 	"github.com/brutella/hc/accessory"
 	"github.com/brutella/hc/log"
+	"github.com/brutella/hc/service"
+
+	"github.com/stianeikeland/go-rpio/v4"
 
 	"image"
 	"runtime"
+
+	"time"
 
 	"github.com/brutella/hkcam"
 	"github.com/brutella/hkcam/ffmpeg"
@@ -22,6 +27,7 @@ func main() {
 	var loopbackFilename *string
 	var h264Encoder *string
 	var h264Decoder *string
+	var motionPin int = -1
 
 	if runtime.GOOS == "linux" {
 		inputDevice = flag.String("input_device", "v4l2", "video input device")
@@ -29,6 +35,7 @@ func main() {
 		loopbackFilename = flag.String("loopback_filename", "/dev/video1", "video loopback device filename")
 		h264Decoder = flag.String("h264_decoder", "", "h264 video decoder")
 		h264Encoder = flag.String("h264_encoder", "h264_omx", "h264 video encoder")
+		flag.IntVar(&motionPin, "motion_pin", -1, "GPIO pin of any attached motion sensor")
 	} else if runtime.GOOS == "darwin" { // macOS
 		inputDevice = flag.String("input_device", "avfoundation", "video input device")
 		inputFilename = flag.String("input_filename", "default", "video input device filename")
@@ -65,6 +72,25 @@ func main() {
 		H264Encoder:      *h264Encoder,
 		MinVideoBitrate:  *minVideoBitrate,
 		MultiStream:      *multiStream,
+	}
+
+	// Add Motion Sensor
+	if motionPin != -1 {
+		err := rpio.Open()
+		if err != nil {
+			log.Info.Panic(err)
+		}
+		pin := rpio.Pin(10)
+		pin.Input()
+
+		motionSensor := service.NewMotionSensor()
+		cam.AddService(motionSensor.Service)
+
+		go func() {
+			for range time.Tick(time.Second) {
+				motionSensor.MotionDetected.SetValue(pin.Read() == rpio.High)
+			}
+		}()
 	}
 
 	ffmpeg := hkcam.SetupFFMPEGStreaming(cam, cfg)
