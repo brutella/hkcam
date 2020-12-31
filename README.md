@@ -180,7 +180,7 @@ as you can see from the following screenshots.
 
 
 # Advanced Configuration
-The application can be further configured using flags in the startup script. These can lead to a misconfigured system and shoud be used at your own caution.
+The application can be further configured using flags in the startup script.
 
 These settings can be changed in the startup script ```/etc/sv/hkcam/run```.
 
@@ -190,6 +190,9 @@ exec 2>&1
 v4l2-ctl --set-fmt-video=width=1280,height=720,pixelformat=YU12
 exec hkcam --data_dir=/var/lib/hkcam/data --verbose=true
 ```
+CAUTION:  Making changes to this file can lead to a misconfigured system which will result in an un-responsive camera inside the 'Home' app.
+
+The following parameters my be invoked by adding them to the exec hkcam line
 
 | Flag | Default value | Description |
 |--------- | -------------- | ----------------- |
@@ -199,6 +202,20 @@ exec hkcam --data_dir=/var/lib/hkcam/data --verbose=true
 | verbose | ```true```| Verbose logging|
 | pin | ```"00102003"``` | PIN for HomeKit pairing |
 | port | ```""``` | Port on which transport is reachable, random  portif empty |
+
+example:
+```
+exec hkcam --data_dir=/var/lib/hkcam/data --verbose=true --multi_stream=true
+```
+
+Video Rotation May be applied with an additional line to the startup script.
+```
+#!/bin/sh -e
+exec 2>&1
+v4l2-ctl --set-fmt-video=width=1280,height=720,pixelformat=YU12 
+v4l2-ctl --set-ctrl=rotate=180
+exec hkcam --data_dir=/var/lib/hkcam/data --verbose=true --multi_stream=true
+```
 
 ## Network 
 `hkcam` uses bonjour for service discovery. The port used for this ```5353```.
