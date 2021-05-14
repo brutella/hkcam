@@ -2,11 +2,12 @@ package ffmpeg
 
 import (
 	"fmt"
-	"github.com/brutella/hc/log"
-	"github.com/brutella/hc/rtp"
 	"os/exec"
 	"strings"
 	"syscall"
+
+	"github.com/brutella/hc/log"
+	"github.com/brutella/hc/rtp"
 )
 
 type stream struct {
@@ -42,46 +43,55 @@ func (s *stream) start(video rtp.VideoParameters, audio rtp.AudioParameters) err
 	// -vsync 2: Fixes "Frame rate very high for a muxer not efficiently supporting it."
 	// -framerate before -i specifies the framerate for the input, after -i sets it for the output https://stackoverflow.com/questions/38498599/webcam-with-ffmpeg-on-mac-selected-framerate-29-970030-is-not-supported-by-th#38549528
 
-	ffmpegVideo := fmt.Sprintf("-f %s", s.inputDevice) +
-		fmt.Sprintf(" -framerate %d", s.framerate(video.Attributes)) +
-		fmt.Sprintf("%s", s.videoDecoderOption(video)) +
-		fmt.Sprintf(" -re -i %s", s.inputFilename) +
-		" -an" +
-		fmt.Sprintf(" -codec:v %s", s.videoEncoder(video)) +
-		" -pix_fmt yuv420p -vsync vfr" +
+	var ffmpegVideo string
+	if s.inputDevice == "rtsp" {
+		// rtsp support
+		ffmpegVideo = fmt.Sprintf("-re -i %s", s.inputFilename) +
+			fmt.Sprintf(" -an -vcodec %s -pix_fmt yuv420p -r 30 -x264-params bframes=0", s.videoEncoder(video)) +
+			fmt.Sprintf(" -video_size %d:-2", video.Attributes.Width) +
+			fmt.Sprintf(" -level:v %s", videoLevel(video.CodecParams)) +
+			" -f rawvideo" +
+			fmt.Sprintf(" -b:v %dk", s.videoBitrate(video)) +
+			fmt.Sprintf(" -payload_type %d", video.RTP.PayloadType) +
+			fmt.Sprintf(" -ssrc %d", s.resp.SsrcVideo) +
+			" -f rtp -srtp_out_suite AES_CM_128_HMAC_SHA1_80" +
+			fmt.Sprintf(" -srtp_out_params %s", s.req.Video.SrtpKey()) +
+			fmt.Sprintf(" srtp://%s:%d?rtcpport=%d&localrtcpport=%d&pkt_size=%s&timeout=120", s.req.ControllerAddr.IPAddr, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, videoMTU(s.req))
+		// audio support may be added later
+		//                fmt.Sprintf(" -map 0:1 -acodec libfdk_aac -profile:a aac_eld -flags +global_header -f null -ar 16k -b:a 24k -bufsize 24k -ac 1 -payload_type 110")+
+		//                fmt.Sprintf(" -ssrc %d -f rtp -srtp_out_suite AES_CM_128_HMAC_SHA1_80 -srtp_out_params %s",s.resp.SsrcAudio, s.req.Audio.SrtpKey())+
+		//                fmt.Sprintf(" srtp://%s:%d?rtcpport=%d&localrtcpport=%d&timeout=120", s.req.ControllerAddr.IPAddr, s.req.ControllerAddr.AudioRtpPort, s.req.ControllerAddr.AudioRtpPort, s.req.ControllerAddr.AudioRtpPort)
+	} else {
+		// default
+		ffmpegVideo = fmt.Sprintf("-f %s", s.inputDevice) +
+			fmt.Sprintf(" -framerate %d", s.framerate(video.Attributes)) +
+			fmt.Sprintf("%s", s.videoDecoderOption(video)) +
+			fmt.Sprintf(" -re -i %s", s.inputFilename) +
+			" -an" +
+			fmt.Sprintf(" -codec:v %s", s.videoEncoder(video)) +
+			" -pix_fmt yuv420p -vsync vfr" +
 
-		// height "-2" keeps the aspect ratio
-		fmt.Sprintf(" -video_size %d:-2", video.Attributes.Width) +
-		fmt.Sprintf(" -framerate %d", video.Attributes.Framerate) +
+			// height "-2" keeps the aspect ratio
+			fmt.Sprintf(" -video_size %d:-2", video.Attributes.Width) +
+			fmt.Sprintf(" -framerate %d", video.Attributes.Framerate) +
 
-		// 2019-06-20 (mah)
-		//   Specifying profiles in h264_omx was added in ffmpeg 3.3
-		//   https://github.com/FFmpeg/FFmpeg/commit/13332504c98918447159da2a1a34e377dca360e2#diff-36301d4a4bc7200caee9fbe8e8d8cc20
-		//   hkcam currently uses ffmpeg 3.2
-		// 2018-08-18 (mah)
-		//   Disable profile arguments because it cannot be parsed
-		// [h264_omx @ 0x93a410] [Eval @ 0xbeaad160] Undefined constant or missing '(' in 'high'
-		// fmt.Sprintf(" -profile:v %s", videoProfile(video.CodecParams)) +
-		fmt.Sprintf(" -level:v %s", videoLevel(video.CodecParams)) +
-		" -f rawvideo" +
-		fmt.Sprintf(" -b:v %dk", s.videoBitrate(video)) +
-		fmt.Sprintf(" -payload_type %d", video.RTP.PayloadType) +
-		fmt.Sprintf(" -ssrc %d", s.resp.SsrcVideo) +
-		" -f rtp -srtp_out_suite AES_CM_128_HMAC_SHA1_80" +
-		fmt.Sprintf(" -srtp_out_params %s", s.req.Video.SrtpKey()) +
-		fmt.Sprintf(" srtp://%s:%d?rtcpport=%d&localrtcpport=%d&pkt_size=%s&timeout=60", s.req.ControllerAddr.IPAddr, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, videoMTU(s.req))
-
-		// FIXME (mah) Audio doesn't work yet
-		// ffmpegAudio := "-vn" +
-		//     fmt.Sprintf(" %s", audioCodecOption(audio)) +
-		//     // compression-level 0-10 (fastest-slowest)
-		//     fmt.Sprintf(" -b:a %dk -bufsize 48k", audio.RTP.Bitrate) +
-		//     fmt.Sprintf(" -ar %s", audioSamplingRate(audio)) +
-		//     fmt.Sprintf(" -payload_type %d", audio.RTP.PayloadType) +
-		// fmt.Sprintf(" -ssrc %d", s.resp.SsrcAudio) +
-		//     " -f rtp -srtp_out_suite AES_CM_128_HMAC_SHA1_80" +
-		//     fmt.Sprintf(" -srtp_out_params %s", s.req.Audio.SrtpKey()) +
-		//     fmt.Sprintf(" srtp://%s:%d?rtcpport=%d&localrtcpport=%d&timeout=60", s.req.ControllerAddr.IPAddr, s.req.ControllerAddr.AudioRtpPort, s.req.ControllerAddr.AudioRtpPort, s.req.ControllerAddr.AudioRtpPort)
+			// 2019-06-20 (mah)
+			//   Specifying profiles in h264_omx was added in ffmpeg 3.3
+			//   https://github.com/FFmpeg/FFmpeg/commit/13332504c98918447159da2a1a34e377dca360e2#diff-36301d4a4bc7200caee9fbe8e8d8cc20
+			//   hkcam currently uses ffmpeg 3.2
+			// 2018-08-18 (mah)
+			//   Disable profile arguments because it cannot be parsed
+			// [h264_omx @ 0x93a410] [Eval @ 0xbeaad160] Undefined constant or missing '(' in 'high'
+			// fmt.Sprintf(" -profile:v %s", videoProfile(video.CodecParams)) +
+			fmt.Sprintf(" -level:v %s", videoLevel(video.CodecParams)) +
+			" -f rawvideo" +
+			fmt.Sprintf(" -b:v %dk", s.videoBitrate(video)) +
+			fmt.Sprintf(" -payload_type %d", video.RTP.PayloadType) +
+			fmt.Sprintf(" -ssrc %d", s.resp.SsrcVideo) +
+			" -f rtp -srtp_out_suite AES_CM_128_HMAC_SHA1_80" +
+			fmt.Sprintf(" -srtp_out_params %s", s.req.Video.SrtpKey()) +
+			fmt.Sprintf(" srtp://%s:%d?rtcpport=%d&localrtcpport=%d&pkt_size=%s&timeout=60", s.req.ControllerAddr.IPAddr, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, videoMTU(s.req))
+	}
 
 	args := strings.Split(ffmpegVideo, " ")
 	cmd := exec.Command("ffmpeg", args[:]...)

@@ -109,7 +109,10 @@ func (l *loopback) Stop() {
 
 // cmd returns a new command to stream video from the input file to the loopback file.
 func (l *loopback) execCmd() *exec.Cmd {
-	cmd := exec.Command("ffmpeg", "-f", l.inputDevice, "-i", l.inputFilename, "-codec:v", "copy", "-f", l.inputDevice, l.loopbackFilename)
+	var cmd *exec.Cmd
+	if l.inputDevice != "rtsp" {
+		cmd = exec.Command("ffmpeg", "-f", l.inputDevice, "-i", l.inputFilename, "-codec:v", "copy", "-f", l.inputDevice, l.loopbackFilename)
+	}
 
 	log.Debug.Println(cmd)
 
