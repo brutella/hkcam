@@ -112,7 +112,7 @@ ssh-copy-id pi@raspberrypi.local
 
 3 run the `rpi` playbook
 ```sh
-cd ansible && ansible-playbook rpi.yml -i hosts --ask-pass
+cd ansible && ansible-playbook rpi.yml -i hosts
 ```
 
 4. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
