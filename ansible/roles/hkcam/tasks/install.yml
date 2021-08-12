@@ -26,8 +26,8 @@
 
 - name: Define extracted folder
   set_fact: unarchived_dir="{{ hkcam_download_dir }}/{{ unarchived.files[0] | dirname }}"
-- name: Copy {{ unarchived_dir }}/usr to /usr
-  shell: cp -rp {{ unarchived_dir }}/usr/* /usr
+- name: Copy {{ unarchived_dir }}/hkcam to /usr/bin
+  shell: cp -rp {{ unarchived_dir }}/hkcam /usr/bin
  
 - name: Ensure that {{ hkcam_data_dir }} exists
   file: path={{ hkcam_data_dir }} mode=0755 state=directory
