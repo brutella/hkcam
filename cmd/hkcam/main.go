@@ -14,6 +14,14 @@ import (
 	"github.com/brutella/hkcam/ffmpeg"
 )
 
+var (
+	// Date is build date.
+	Date string
+
+	// Version is the app version.
+	Version string
+)
+
 func main() {
 
 	// Platform dependent flags
@@ -53,7 +61,9 @@ func main() {
 		ffmpeg.EnableVerboseLogging()
 	}
 
-	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: "0.0.9", Manufacturer: "Matthias Hochgatterer"}
+	log.Info.Printf("version %s (built at %s)\n", Version, Date)
+
+	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: Version, Manufacturer: "Matthias Hochgatterer"}
 	cam := accessory.NewCamera(switchInfo)
 
 	cfg := ffmpeg.Config{
