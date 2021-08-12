@@ -33,27 +33,24 @@ tasks:
             - cmd/hkcam/main.go
             - ./*.go
             - Taskfile.yml
-    hkcam-pack:
+    pack:
         cmds:
-            - task: build-fs
             # Raspberry Pi
-            - "GOOS=linux GOARCH=arm GOARM=6 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_RPI }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
+            - "GOOS=linux GOARCH=arm GOARM=6 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_RPI }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
             # Linux
-            - "GOOS=linux GOARCH=amd64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_64 }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
+            - "GOOS=linux GOARCH=amd64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_64 }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
             # Linux
-            - "GOOS=linux GOARCH=386 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_32 }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
+            - "GOOS=linux GOARCH=386 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_32 }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
             # Intel Mac
-            - "GOOS=darwin GOARCH=amd64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_INTEL_MAC }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
+            - "GOOS=darwin GOARCH=amd64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_INTEL_MAC }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
             # M1 Mac
-            - "GOOS=darwin GOARCH=arm64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_M1_MAC }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
-            # Copy Installation.md
-            - "cp {{ .INSTALLATION }} {{ .BUILD_DIR }}/{{ .INSTALLATION }}"
+            - "GOOS=darwin GOARCH=arm64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_M1_MAC }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
             # pack
-            - "tar -cvzf {{ .PACKAGE_RPI }}.tar.gz -C {{ .BUILD_DIR }} {{ .INSTALLATION }} -C {{ .BUILD_DIR }}/{{ .PACKAGE_RPI }} {{ .BINARY }}"
-            - "tar -cvzf {{ .PACKAGE_LINUX_64 }}.tar.gz -C {{ .BUILD_DIR }} {{ .INSTALLATION }} -C {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_64 }} {{ .BINARY }}"
-            - "tar -cvzf {{ .PACKAGE_LINUX_32 }}.tar.gz -C {{ .BUILD_DIR }} {{ .INSTALLATION }} -C {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_32 }} {{ .BINARY }}"
-            - "tar -cvzf {{ .PACKAGE_INTEL_MAC }}.tar.gz -C {{ .BUILD_DIR }} {{ .INSTALLATION }} -C {{ .BUILD_DIR }}/{{ .PACKAGE_INTEL_MAC }} {{ .BINARY }}"
-            - "tar -cvzf {{ .PACKAGE_M1_MAC }}.tar.gz -C {{ .BUILD_DIR }} {{ .INSTALLATION }} -C {{ .BUILD_DIR }}/{{ .PACKAGE_M1_MAC }} {{ .BINARY }}"
+            - "tar -cvzf {{ .PACKAGE_RPI }}.tar.gz -C {{ .BUILD_DIR }}/{{ .PACKAGE_RPI }} {{ .BINARY }}"
+            - "tar -cvzf {{ .PACKAGE_LINUX_64 }}.tar.gz -C {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_64 }} {{ .BINARY }}"
+            - "tar -cvzf {{ .PACKAGE_LINUX_32 }}.tar.gz -C {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_32 }} {{ .BINARY }}"
+            - "tar -cvzf {{ .PACKAGE_INTEL_MAC }}.tar.gz -C {{ .BUILD_DIR }}/{{ .PACKAGE_INTEL_MAC }} {{ .BINARY }}"
+            - "tar -cvzf {{ .PACKAGE_M1_MAC }}.tar.gz -C {{ .BUILD_DIR }}/{{ .PACKAGE_M1_MAC }} {{ .BINARY }}"
         vars:
             BINARY: hkcam
             PACKAGE_RPI: "{{ .BINARY }}-{{ .VERSION }}_linux_arm"
