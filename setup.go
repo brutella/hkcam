@@ -50,8 +50,6 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 			log.Debug.Fatalf("SelectedRTPStreamConfiguration: Could not unmarshal tlv8 data: %s\n", err)
 		}
 
-		log.Debug.Printf("%+v\n", cfg)
-
 		id := ffmpeg.StreamID(cfg.Command.Identifier)
 		switch cfg.Command.Type {
 		case rtp.SessionControlCommandTypeEnd:
@@ -90,8 +88,6 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 			log.Debug.Fatalf("SetupEndpoints: Could not unmarshal tlv8 data: %s\n", err)
 		}
 
-		log.Debug.Printf("%+v\n", req)
-
 		iface, err := ifaceOfConnection(conn)
 		if err != nil {
 			log.Debug.Println(err)
@@ -123,8 +119,6 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 		}
 
 		ff.PrepareNewStream(req, resp)
-
-		log.Debug.Printf("%+v\n", resp)
 
 		// After a write, the characteristic should contain a response
 		setTLV8Payload(m.SetupEndpoints.Bytes, resp)
