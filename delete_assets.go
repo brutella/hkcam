@@ -1,7 +1,7 @@
 package hkcam
 
 import (
-	"github.com/brutella/hc/characteristic"
+	"github.com/brutella/hap/characteristic"
 )
 
 // TypeDeleteAssets is the uuid of the DeleteAssets characteristic
@@ -16,8 +16,8 @@ type DeleteAssets struct {
 
 func NewDeleteAssets() *DeleteAssets {
 	b := characteristic.NewBytes(TypeDeleteAssets)
-	b.Perms = []string{characteristic.PermRead, characteristic.PermWrite}
-	b.Value = []byte{}
+	b.Permissions = []string{characteristic.PermissionRead, characteristic.PermissionWrite}
+	b.SetValue([]byte{})
 
 	return &DeleteAssets{b}
 }

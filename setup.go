@@ -2,13 +2,14 @@ package hkcam
 
 import (
 	"fmt"
-	"github.com/brutella/hc/accessory"
-	"github.com/brutella/hc/characteristic"
-	"github.com/brutella/hc/log"
-	"github.com/brutella/hc/rtp"
-	"github.com/brutella/hc/service"
-	"github.com/brutella/hc/tlv8"
+	"github.com/brutella/hap/accessory"
+	"github.com/brutella/hap/characteristic"
+	"github.com/brutella/hap/log"
+	"github.com/brutella/hap/rtp"
+	"github.com/brutella/hap/service"
+	"github.com/brutella/hap/tlv8"
 	"net"
+	"net/http"
 	"reflect"
 	"strings"
 
@@ -80,15 +81,18 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 		}
 	})
 
-	m.SetupEndpoints.OnValueUpdateFromConn(func(conn net.Conn, c *characteristic.Characteristic, new, old interface{}) {
-		buf := m.SetupEndpoints.GetValue()
+	m.SetupEndpoints.OnValueUpdate(func(new, old []byte, r *http.Request) {
+		if r == nil {
+			return
+		}
+
 		var req rtp.SetupEndpoints
-		err := tlv8.Unmarshal(buf, &req)
+		err := tlv8.Unmarshal(new, &req)
 		if err != nil {
 			log.Debug.Fatalf("SetupEndpoints: Could not unmarshal tlv8 data: %s\n", err)
 		}
 
-		iface, err := ifaceOfConnection(conn)
+		iface, err := ifaceOfRequest(r)
 		if err != nil {
 			log.Debug.Println(err)
 			return
@@ -158,9 +162,14 @@ func ipAtInterface(iface net.Interface, version uint8) (net.IP, error) {
 	return nil, fmt.Errorf("%s: No ip address found for version %d", iface.Name, version)
 }
 
-// ifaceOfConnection returns the network interface at which the connection was established.
-func ifaceOfConnection(conn net.Conn) (*net.Interface, error) {
-	host, _, err := net.SplitHostPort(conn.LocalAddr().String())
+// ifaceOfRequest returns the network interface at which the connection was established.
+func ifaceOfRequest(r *http.Request) (*net.Interface, error) {
+	v := r.Context().Value(http.LocalAddrContextKey)
+	if v == nil {
+		return nil, fmt.Errorf("no local address in context")
+	}
+
+	host, _, err := net.SplitHostPort(v.(net.Addr).String())
 	if err != nil {
 		return nil, err
 	}

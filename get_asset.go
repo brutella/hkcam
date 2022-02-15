@@ -1,7 +1,7 @@
 package hkcam
 
 import (
-	"github.com/brutella/hc/characteristic"
+	"github.com/brutella/hap/characteristic"
 )
 
 const TypeGetAsset = "6A6C39F5-67F0-4BE1-BA9D-E56BD27C9606"
@@ -16,8 +16,8 @@ type GetAsset struct {
 
 func NewGetAsset() *GetAsset {
 	b := characteristic.NewBytes(TypeGetAsset)
-	b.Perms = []string{characteristic.PermRead, characteristic.PermWrite}
-	b.Value = []byte{}
+	b.Permissions = []string{characteristic.PermissionRead, characteristic.PermissionWrite}
+	b.SetValue([]byte{})
 
 	return &GetAsset{b}
 }

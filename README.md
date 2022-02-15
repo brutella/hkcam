@@ -1,7 +1,7 @@
 # hkcam
 
 `hkcam` is an open-source implementation of an HomeKit IP camera. 
-It uses `ffmpeg` to access the camera stream and publishes the stream to HomeKit using [hc](https://github.com/brutella/hc).
+It uses `ffmpeg` to access the camera stream and publishes the stream to HomeKit using [hc](https://github.com/brutella/hap).
 The camera stream can be viewed in a HomeKit app. For example my [Home](https://hochgatterer.me/home) app works perfectly with `hkcam`.
 
 ## Features
@@ -85,7 +85,7 @@ psk="<password>"
 - replace `<ssid>` with the name of your WiFi, and `<password>` with the WiFi password.
     
 4. insert the sd card into your Raspberry Pi and power it up.
-(After a reboot it may take up to several minutes until the camera is accessible via HomeKit – see [issue #136](https://github.com/brutella/hc/issues/136).)
+(After a reboot it may take up to several minutes until the camera is accessible via HomeKit – see [issue #136](https://github.com/brutella/hap/issues/136).)
 
 5. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
 

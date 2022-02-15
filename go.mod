@@ -2,8 +2,10 @@ module github.com/brutella/hkcam
 
 go 1.12
 
+replace github.com/brutella/hap => ../hap
+
 require (
-	github.com/brutella/hc v1.2.5-0.20210809073424-91c89ca209d9
+	github.com/brutella/hap v1.2.5
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/radovskyb/watcher v1.0.6
 )

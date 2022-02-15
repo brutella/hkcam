@@ -1,7 +1,7 @@
 package hkcam
 
 import (
-	"github.com/brutella/hc/log"
+	"github.com/brutella/hap/log"
 	"github.com/nfnt/resize"
 	"github.com/radovskyb/watcher"
 

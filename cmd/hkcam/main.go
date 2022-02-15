@@ -1,17 +1,25 @@
 package main
 
 import (
-	"flag"
-
-	"github.com/brutella/hc"
-	"github.com/brutella/hc/accessory"
-	"github.com/brutella/hc/log"
-
-	"image"
-	"runtime"
-
+	"github.com/brutella/hap"
+	"github.com/brutella/hap/accessory"
+	"github.com/brutella/hap/log"
 	"github.com/brutella/hkcam"
 	"github.com/brutella/hkcam/ffmpeg"
+
+	"bytes"
+	"context"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"image"
+	"image/jpeg"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"os/signal"
+	"runtime"
+	"syscall"
 )
 
 var (
@@ -50,7 +58,7 @@ func main() {
 
 	var minVideoBitrate *int = flag.Int("min_video_bitrate", 0, "minimum video bit rate in kbps")
 	var multiStream *bool = flag.Bool("multi_stream", false, "Allow mutliple clients to view the stream simultaneously")
-	var dataDir *string = flag.String("data_dir", "Camera", "Path to data directory")
+	var dataDir *string = flag.String("data_dir", "db", "Path to data directory")
 	var verbose *bool = flag.Bool("verbose", true, "Verbose logging")
 	var pin *string = flag.String("pin", "00102003", "PIN for HomeKit pairing")
 	var port *string = flag.String("port", "", "Port on which transport is reachable")
@@ -64,7 +72,7 @@ func main() {
 
 	log.Info.Printf("version %s (built at %s)\n", Version, Date)
 
-	switchInfo := accessory.Info{Name: "Camera", FirmwareRevision: Version, Manufacturer: "Matthias Hochgatterer"}
+	switchInfo := accessory.Info{Name: "Camera", Firmware: Version, Manufacturer: "Matthias Hochgatterer"}
 	cam := accessory.NewCamera(switchInfo)
 
 	cfg := ffmpeg.Config{
@@ -81,28 +89,97 @@ func main() {
 
 	// Add a custom camera control service to record snapshots
 	cc := hkcam.NewCameraControl()
-	cam.Control.AddCharacteristic(cc.Assets.Characteristic)
-	cam.Control.AddCharacteristic(cc.GetAsset.Characteristic)
-	cam.Control.AddCharacteristic(cc.DeleteAssets.Characteristic)
-	cam.Control.AddCharacteristic(cc.TakeSnapshot.Characteristic)
+	cam.Control.AddC(cc.Assets.C)
+	cam.Control.AddC(cc.GetAsset.C)
+	cam.Control.AddC(cc.DeleteAssets.C)
+	cam.Control.AddC(cc.TakeSnapshot.C)
 
-	t, err := hc.NewIPTransport(hc.Config{StoragePath: *dataDir, Pin: *pin, Port: *port}, cam.Accessory)
+	s, err := hap.NewServer(hap.NewFsStore(*dataDir), cam.A)
 	if err != nil {
 		log.Info.Panic(err)
 	}
 
-	t.CameraSnapshotReq = func(width, height uint) (*image.Image, error) {
-		return ffmpeg.Snapshot(width, height)
-	}
+	s.Pin = *pin
+	s.Addr = fmt.Sprintf(":%s", *port)
+
+	s.ServeMux().HandleFunc("/resource", func(res http.ResponseWriter, req *http.Request) {
+		if req.Method != http.MethodPost {
+			res.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		body, err := ioutil.ReadAll(req.Body)
+		if err != nil {
+			log.Info.Println(err)
+			res.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		r := struct {
+			Type   string `json:"resource-type"`
+			Width  uint   `json:"image-width"`
+			Height uint   `json:"image-height"`
+		}{}
+
+		err = json.Unmarshal(body, &r)
+		if err != nil {
+			log.Info.Println(err)
+			res.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		log.Debug.Printf("%+v\n", r)
+
+		switch r.Type {
+		case "image":
+			b, err := snapshot(r.Width, r.Height, ffmpeg)
+			if err != nil {
+				log.Info.Println(err)
+				res.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			res.Header().Set("Content-Type", "image/jpeg")
+			wr := hap.NewChunkedWriter(res, 2048)
+			wr.Write(b)
+		default:
+			log.Info.Printf("unsupported resource request \"%s\"\n", r.Type)
+			res.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	})
 
 	cc.SetupWithDir(*dataDir)
 	cc.CameraSnapshotReq = func(width, height uint) (*image.Image, error) {
 		return ffmpeg.Snapshot(width, height)
 	}
 
-	hc.OnTermination(func() {
-		<-t.Stop()
-	})
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt)
+	signal.Notify(c, syscall.SIGTERM)
 
-	t.Start()
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		<-c
+		signal.Stop(c) // stop delivering signals
+		cancel()
+	}()
+
+	s.ListenAndServe(ctx)
+}
+
+func snapshot(width, height uint, ffmpeg ffmpeg.FFMPEG) ([]byte, error) {
+	log.Debug.Printf("snasphot %dw x %dh\n", width, height)
+
+	img, err := ffmpeg.Snapshot(width, height)
+	if err != nil {
+		return nil, fmt.Errorf("snapshot: %v", err)
+	}
+
+	buf := new(bytes.Buffer)
+	if err := jpeg.Encode(buf, *img, nil); err != nil {
+		return nil, fmt.Errorf("encode: %v", err)
+	}
+
+	return buf.Bytes(), nil
 }
