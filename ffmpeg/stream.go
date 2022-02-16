@@ -113,7 +113,7 @@ func (s *stream) resume() {
 // TODO (mah) implement
 func (s *stream) reconfigure(video rtp.VideoParameters, audio rtp.AudioParameters) error {
 	if s.cmd != nil {
-		log.Debug.Println("reconfigure() is not implemented")
+		log.Debug.Printf("reconfigure() is not implemented %+v %+v\n", video, audio)
 	}
 
 	return nil
