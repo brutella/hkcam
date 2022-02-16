@@ -55,16 +55,16 @@ Follow these steps to install `hkcam` and all the required libraries on a Raspbe
 1. Download and run the Raspberry Pi Imager from https://www.raspberrypi.com/software/
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager.png?raw=true" width="400" />
 
-1.1 Choose OS → Raspberry Pi OS (other) → Raspberry Pi OS Lite (32-bit)
+- Choose OS → Raspberry Pi OS (other) → Raspberry Pi OS Lite (32-bit)
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager-os.png?raw=true" width="400" />
 
-1.2 Insert a sd card into your computer and choose it as the storage
+- Insert a sd card into your computer and choose it as the storage
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager-storage.png?raw=true" width="400" />
 
-1.3 Click on the settings icon and **enable SSH**, **Set username and password** and **configure wifi**
+- Click on the settings icon and **enable SSH**, **Set username and password** and **configure wifi**
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager-settings.png?raw=true" width="400" />
 
-1.4 Write the operating system on the sd card by clicking on **Write**
+- Write the operating system on the sd card by clicking on **Write**
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager-write.png?raw=true" width="400" />
 
 2. Insert the sd card in your Raspberry Pi
@@ -78,47 +78,84 @@ Follow these steps to install `hkcam` and all the required libraries on a Raspbe
 6. Install v4l2loopback
 `apt-get install v4l2loopback-dkms`
 
-6.1 Enable v4l2loopback module at boot by creating a file `/etc/modules-load.d/v4l2loopback.conf` with the content
+- Enable v4l2loopback module at boot by creating a file `/etc/modules-load.d/v4l2loopback.conf` with the content
+
 ```
 v4l2loopback
 ```
 
-6.2 Specify which loopback file should be created by the module (in our case /dev/video99) by creating the file `/etc/modprobe.d/v4l2loopback.conf` with the content
+- Specify which loopback file should be created by the module (in our case /dev/video99) by creating the file `/etc/modprobe.d/v4l2loopback.conf` with the content
 ```
 options v4l2loopback video_nr=99
 ```
 
-6.3 Restart the Raspberry Pi and verify that the file `/dev/video99` exists
+- Restart the Raspberry Pi and verify that the file `/dev/video99` exists
 
 7. Install `hkcam`
 
-7.1 Download the latest release from https://github.com/brutella/hkcam/releases
+- Download the latest release from https://github.com/brutella/hkcam/releases
 ```
 wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_linux_arm.tar.gz
 ```
 
-7.2 Extract the archive with `tar -xzf hkcam-v0.1.0_linux_arm.tar.gz`
-
-7.3 Run `hkcam` by executing the following command
+- Extract the archive with `tar -xzf hkcam-v0.1.0_linux_arm.tar.gz`
+- Run `hkcam` by executing the following command
 ```
 ./hkcam -db=/var/lib/hkcam/data -multi_stream=true -verbose
 ```
 
 8. Add the camera to HomeKit
 
-8.1 Launch the Apple Home-app and tap *+* → Add Accessory
+- Launch the Apple Home-app and tap *+* → Add Accessory
 
-8.2 Tap *More Options...*
+- Tap *More Options...*
 
 <img alt="More options" src="_img/home-app-more-options.jpeg?raw=true" width="400" />
 
-8.3 Select *Camera* and confirm that the accessory is uncertified
+- Select *Camera* and confirm that the accessory is uncertified
 
 <img alt="Select Accessory" src="_img/home-app-select-camera.jpeg?raw=true" width="400" />
 
-8.4 Enter the pin `001-02-003` and Continue
+- Enter the pin `001-02-003` and Continue
 
 <img alt="Select Accessory" src="_img/home-app-pin.jpeg?raw=true" width="400" />
+
+If everything works as expected, you have to configure `hkcam` as a daemon – so that hkcam is automatically run after boot.
+This can be done in different way – [systemd](https://www.raspberrypi.com/documentation/computers/using_linux.html#the-systemd-daemon) is recommended,
+
+## Multistream
+
+Normally in HomeKit a camera stream can only be viewed by once device at a time.
+If a second devices wants to to view the stream, the Apple Home app shows **Camera Not Available** *Wait until someone else in this home stops viewing this camera and try again.* This is very annoying.
+
+`hkcam` allows multiple devices to view the same stream by setting the option `-multi_stream=true`. That's neat.
+
+## Persistent Snapshots
+
+In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHOTS.md).
+*Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
+You can then access them via HomeKit.
+
+*Persistent Snapshots* are currently supported by [Home+](https://hochgatterer.me/home),
+as you can see from the following screenshots.
+
+| Services | Live Streaming | List of Snapshots |
+|--------- | -------------- | ----------------- |
+| <img alt="Services" src="_img/services.jpg?raw=true" width="280" /> | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> |
+
+| Snapshot | Automation |
+| --------------| -------------- |
+| <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> | <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
+
+
+## Looking for an Enclosure
+
+<img alt="Desk mount" src="_img/enclosure-desk.jpg?raw=true" width="320" />
+<img alt="Wall mount" src="_img/enclosure-wall.jpg?raw=true" width="320" />
+
+The 3D-printed enclosure is designed for a Raspberry Pi Zero W and standard camera module.
+You can use a stand to put the camera on a desk, or combine it with brackets of the [Articulating Raspberry Pi Camera Mount](https://www.prusaprinters.org/prints/3407-articulating-raspberry-pi-camera-mount-for-prusa-m) to mount it on a wall.
+The 3D-printed parts are available as STL files [here](https://github.com/brutella/hkcam/tree/master/enclosure).
 
 <!-- #### Pre-configured Raspbian  Image
 
@@ -240,24 +277,6 @@ The 3D-printed enclosure is designed for a Raspberry Pi Zero W and standard came
 You can use a stand to put the camera on a desk, or combine it with brackets of the [Articulating Raspberry Pi Camera Mount]() to mount it on a wall.
 
 The 3D-printed parts are available as STL files [here](https://github.com/brutella/hkcam/tree/master/enclosure).
-
-# Persistent Snapshots
-
-In addition to video streaming, `hkcam` supports [Persistent Snapshots](/SNAPSHOTS.md).
-*Persistent Snapshots* is a way to take snapshots of the camera and store them on disk.
-You can then access them via HomeKit.
-
-*Persistent Snapshots* are currently supported by [Home 3](https://hochgatterer.me/home),
-as you can see from the following screenshots.
-
-| Services | Live Streaming | List of Snapshots |
-|--------- | -------------- | ----------------- |
-| <img alt="Services" src="_img/services.jpg?raw=true" width="280" /> | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> |
-
-| Snapshot | Automation |
-| --------------| -------------- |
-| <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> | <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
-
 
 # Advanced Configuration
 The application can be further configured using flags in the startup script. These can lead to a misconfigured system and shoud be used at your own caution.
