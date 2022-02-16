@@ -156,7 +156,7 @@ Normally in HomeKit a camera stream can only be viewed by once device at a time.
 If a second devices wants to to view the stream, the Apple Home app shows
 
 > **Camera Not Available**
-> *Wait until someone else in this home stops viewing this camera and try again.* This is very annoying.
+> Wait until someone else in this home stops viewing this camera and try again.
 
 `hkcam` allows multiple devices to view the same stream by setting the option `-multi_stream=true`. That's neat.
 
