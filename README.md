@@ -91,6 +91,7 @@ options v4l2loopback video_nr=99
 6.3 Restart the Raspberry Pi and verify that the file `/dev/video99` exists
 
 7. Install `hkcam`
+
 7.1 Download the latest release from https://github.com/brutella/hkcam/releases
 ```
 wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_linux_arm.tar.gz
@@ -104,14 +105,19 @@ wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_lin
 ```
 
 8. Add the camera to HomeKit
+
 8.1 Launch the Apple Home-app and tap *+* → Add Accessory
+
 8.2 Tap *More Options...*
+
 <img alt="More options" src="_img/home-app-more-options.jpeg?raw=true" width="400" />
 
 8.3 Select *Camera* and confirm that the accessory is uncertified
+
 <img alt="Select Accessory" src="_img/home-app-select-camera.jpeg?raw=true" width="400" />
 
 8.4 Enter the pin `001-02-003` and Continue
+
 <img alt="Select Accessory" src="_img/home-app-pin.jpeg?raw=true" width="400" />
 
 <!-- #### Pre-configured Raspbian  Image
