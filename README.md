@@ -48,48 +48,71 @@ I love those [ELP 1080P USB cameras](https://de.aliexpress.com/item/400056225332
 
 ---
 
-** How to Install on a Raspberry Pi? **
+**How to Install on a Raspberry Pi?**
 
-Follow these steps to install `hkcam` and all the required libraries on a Raspberry Pi OS (32-bit).
+Follow these steps to install `hkcam` and all the required libraries on a Raspberry Pi OS Lite (32-bit).
 
 1. Download and run the Raspberry Pi Imager from https://www.raspberrypi.com/software/
-
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager.png?raw=true" width="400" />
 
-1.1 Choose the Raspberry Pi OS (32-bit)
-
+1.1 Choose OS → Raspberry Pi OS (other) → Raspberry Pi OS Lite (32-bit)
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager-os.png?raw=true" width="400" />
 
 1.2 Insert a sd card into your computer and choose it as the storage
-
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager-storage.png?raw=true" width="400" />
 
-1.3 Click on the settings icon and **enable SSH** and **configure wifi** (enter your Wifi credentials)
-
+1.3 Click on the settings icon and **enable SSH**, **Set username and password** and **configure wifi**
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager-settings.png?raw=true" width="400" />
 
 1.4 Write the operating system on the sd card by clicking on **Write**
-
 <img alt="Raspberry Pi Imager" src="_img/rpi-imager-write.png?raw=true" width="400" />
 
 2. Insert the sd card in your Raspberry Pi
 3. Connect your camera (in my case the ELP 1080P) and power supply
 4. Connect to your Raspberry Pi via SSH (the first boot may take a while, so be patient)
-`ssh pi@raspberrypi.local` (password is `raspberry`)
+`ssh pi@raspberrypi.local` (enter your previously configured password)
+
 5. Install ffmpeg
 `apt-get install ffmpeg`
+
 6. Install v4l2loopback
 `apt-get install v4l2loopback-dkms`
+
 6.1 Enable v4l2loopback module at boot by creating a file `/etc/modules-load.d/v4l2loopback.conf` with the content
 ```
 v4l2loopback
 ```
+
 6.2 Specify which loopback file should be created by the module (in our case /dev/video99) by creating the file `/etc/modprobe.d/v4l2loopback.conf` with the content
 ```
 options v4l2loopback video_nr=99
 ```
-7. Install `hkcam` by download the latest release from https://github.com/brutella/hkcam/releases
-`wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_linux_arm.tar.gz`
+
+6.3 Restart the Raspberry Pi and verify that the file `/dev/video99` exists
+
+7. Install `hkcam`
+7.1 Download the latest release from https://github.com/brutella/hkcam/releases
+```
+wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_linux_arm.tar.gz
+```
+
+7.2 Extract the archive with `tar -xzf hkcam-v0.1.0_linux_arm.tar.gz`
+
+7.3 Run `hkcam` by executing the following command
+```
+./hkcam -db=/var/lib/hkcam/data -multi_stream=true -verbose
+```
+
+8. Add the camera to HomeKit
+8.1 Launch the Apple Home-app and tap *+* → Add Accessory
+8.2 Tap *More Options...*
+<img alt="More options" src="_img/home-app-more-options.jpeg?raw=true" width="400" />
+
+8.3 Select *Camera* and confirm that the accessory is uncertified
+<img alt="Select Accessory" src="_img/home-app-select-camera.jpeg?raw=true" width="400" />
+
+8.4 Enter the pin `001-02-003` and Continue
+<img alt="Select Accessory" src="_img/home-app-pin.jpeg?raw=true" width="400" />
 
 <!-- #### Pre-configured Raspbian  Image
 
