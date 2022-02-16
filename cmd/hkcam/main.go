@@ -42,16 +42,16 @@ func main() {
 	if runtime.GOOS == "linux" {
 		inputDevice = flag.String("input_device", "v4l2", "video input device")
 		inputFilename = flag.String("input_filename", "/dev/video0", "video input device filename")
-		loopbackFilename = flag.String("loopback_filename", "/dev/video1", "video loopback device filename")
+		loopbackFilename = flag.String("loopback_filename", "/dev/video99", "video loopback device filename")
 		h264Decoder = flag.String("h264_decoder", "", "h264 video decoder")
-		h264Encoder = flag.String("h264_encoder", "h264_omx", "h264 video encoder")
+		h264Encoder = flag.String("h264_encoder", "h264_v4l2m2m", "h264 video encoder")
 	} else if runtime.GOOS == "darwin" { // macOS
 		inputDevice = flag.String("input_device", "avfoundation", "video input device")
 		inputFilename = flag.String("input_filename", "default", "video input device filename")
 		// loopback is not needed on macOS because avfoundation provides multi-access to the camera
 		loopbackFilename = flag.String("loopback_filename", "", "video loopback device filename")
 		h264Decoder = flag.String("h264_decoder", "", "h264 video decoder")
-		h264Encoder = flag.String("h264_encoder", "libx264", "h264 video encoder")
+		h264Encoder = flag.String("h264_encoder", "h264_videotoolbox", "h264 video encoder")
 	} else {
 		log.Info.Fatalf("%s platform is not supported", runtime.GOOS)
 	}
