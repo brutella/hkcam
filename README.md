@@ -123,6 +123,33 @@ wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_lin
 If everything works as expected, you have to configure `hkcam` as a daemon – so that hkcam is automatically run after boot.
 This can be done in different way – [systemd](https://www.raspberrypi.com/documentation/computers/using_linux.html#the-systemd-daemon) is recommended,
 
+
+**How to install with Ansible?**
+
+I've made an [Ansible](http://docs.ansible.com/ansible/index.html) playbook which configures your Raspberry Pi and installs hkcam.
+The following steps require *ansible* to be installed. On macOS you can install it via Homebrew.
+```sh
+brew install ansible
+```
+
+---
+
+First install Raspberry Pi OS, as described above.
+Then create ssh key and copy them to the Raspberry Pi.
+
+```sh
+ssh-keygen
+ssh-copy-id pi@raspberrypi.local
+```
+
+After that you can execute the playbook with the following command.
+
+```sh
+cd ansible && ansible-playbook rpi.yml -i hosts
+```
+
+Once the command finishes, your camera can is available for HomeKit.
+
 ## Multistream
 
 Normally in HomeKit a camera stream can only be viewed by once device at a time.
