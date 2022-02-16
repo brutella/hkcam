@@ -1,9 +1,7 @@
 ---
-hkcam_version: 'v0.0.10'
+hkcam_version: 'v0.1.0'
 hkcam_download_file_name: hkcam-{{ hkcam_version }}_linux_arm.tar.gz
 hkcam_download_url: https://github.com/brutella/hkcam/releases/download/{{ hkcam_version }}/{{ hkcam_download_file_name }}
 hkcam_download_dir: /tmp
 hkcam_download_dest: "{{ hkcam_download_dir }}/{{ hkcam_download_file_name }}"
 hkcam_data_dir: /var/lib/hkcam/data
-
-disable_camera_led: false
