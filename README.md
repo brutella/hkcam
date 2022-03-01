@@ -43,7 +43,7 @@ brew install ffmpeg
 If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi.
 You can use a [camera module](https://www.raspberrypi.com/products/camera-module-v2/) or attach an USB camera.
 
-I love those [ELP 1080P USB cameras](https://de.aliexpress.com/item/4000562253329.html), which are IP66 waterproof and have IR LEDs for night vision.
+A great camera is the [ELP 1080P USB camera](https://de.aliexpress.com/item/4000562253329.html), which is IP66 waterproof and has IR LEDs for night vision.
 
 <img alt="ELP 1080p" src="_img/elp-1080p.jpg?raw=true" width="400" />
 
@@ -177,7 +177,7 @@ Taking snapshots in automations is also supported.
 
 <img alt="Automation" src="_img/homeplus-automation.jpeg?raw=true" width="280" />
 
-## Raspberry Pi Zero W Enclosure?
+## Raspberry Pi Zero W Enclosure
 
 <img alt="Desk mount" src="_img/enclosure-desk.jpg?raw=true" width="320" />
 <img alt="Wall mount" src="_img/enclosure-wall.jpg?raw=true" width="320" />
