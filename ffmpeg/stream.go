@@ -69,7 +69,7 @@ func (s *stream) start(video rtp.VideoParameters, audio rtp.AudioParameters) err
 		fmt.Sprintf(" -ssrc %d", s.resp.SsrcVideo) +
 		" -f rtp -srtp_out_suite AES_CM_128_HMAC_SHA1_80" +
 		fmt.Sprintf(" -srtp_out_params %s", s.req.Video.SrtpKey()) +
-		fmt.Sprintf(" srtp://%s:%d?rtcpport=%d&localrtcpport=%d&pkt_size=%s&timeout=60", s.req.ControllerAddr.IPAddr, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, videoMTU(s.req))
+		fmt.Sprintf(" srtp://%s:%d?rtcpport=%d&pkt_size=%s&timeout=60", s.req.ControllerAddr.IPAddr, s.req.ControllerAddr.VideoRtpPort, s.req.ControllerAddr.VideoRtpPort, videoMTU(s.req))
 
 		// FIXME (mah) Audio doesn't work yet
 		// ffmpegAudio := "-vn" +
