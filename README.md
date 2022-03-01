@@ -14,8 +14,6 @@ The camera stream can be viewed in a HomeKit app. For example my [Home+](https:/
 - [Persistent Snapshots](#persistent-snapshots)
 - Runs on multiple platforms (Linux, macOS)
 
-- [3D-Printed Enclosure](#enclosure)
-
 
 ## Get Started
 
