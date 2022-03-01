@@ -152,8 +152,8 @@ Once the command finishes, your camera can be added to HomeKit.
 
 ## Multistream
 
-Normally in HomeKit a camera stream can only be viewed by once device at a time.
-If a second devices wants to to view the stream, the Apple Home app shows
+Normally in HomeKit a camera stream can only be viewed by one device at a time.
+If a second device wants to to view the stream, the Apple Home app shows
 
 > **Camera Not Available**
 > Wait until someone else in this home stops viewing this camera and try again.

@@ -4,7 +4,7 @@
 You can then access them via HomeKit.
 *Persistent Snapshots* is not defined in the HAP but instead implemented by `hkcam` with custom characteristics.
 
-*Persistent Snapshots* are supported by [Home 3](https://hochgatterer.me/home).
+*Persistent Snapshots* are supported by [Home+](https://hochgatterer.me/home+).
 
 ## Why?
 
