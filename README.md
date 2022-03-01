@@ -174,6 +174,9 @@ as you can see from the following screenshots.
 
 <img alt="Live streaming" src="_img/homeplus-stream.png?raw=true" width="280" />
 <img alt="Snapshots" src="_img/homeplus-snapshots.png?raw=true" width="280" />
+
+Taking snapshots in automations is also supported.
+
 <img alt="Automation" src="_img/homeplus-automation.jpeg?raw=true" width="280" />
 
 ## Raspberry Pi Zero W Enclosure?
