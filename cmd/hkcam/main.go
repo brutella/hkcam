@@ -103,6 +103,10 @@ func main() {
 	s.Addr = fmt.Sprintf(":%s", *port)
 
 	s.ServeMux().HandleFunc("/resource", func(res http.ResponseWriter, req *http.Request) {
+		if s.IsAuthorized(req) {
+			hap.JsonError(res, hap.JsonStatusInsufficientPrivileges)
+			return
+		}
 		if req.Method != http.MethodPost {
 			res.WriteHeader(http.StatusBadRequest)
 			return
