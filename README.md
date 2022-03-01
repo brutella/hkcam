@@ -4,10 +4,12 @@
 It uses `ffmpeg` to access the camera stream and publishes the stream to HomeKit using [hap](https://github.com/brutella/hap).
 The camera stream can be viewed in a HomeKit app. For example my [Home+](https://hochgatterer.me/home) app works perfectly with `hkcam`.
 
+<img alt="Camera Stream" src="_img/home-app-camera.jpeg?raw=true" />
+
 ## Features
 
 - Live streaming via HomeKit
-- Works with any HomeKit app
+- Works with any HomeKit app (ex. [Home+](https://hochgatterer.me/home))
 - [Multistream Support](#multistream)
 - [Persistent Snapshots](#persistent-snapshots)
 - Runs on multiple platforms (Linux, macOS)
@@ -43,7 +45,8 @@ brew install ffmpeg
 If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi.
 You can use a [camera module](https://www.raspberrypi.com/products/camera-module-v2/) or attach an USB camera.
 
-I love those [ELP 1080P USB cameras](https://de.aliexpress.com/item/4000562253329.html), which are IP66 waterproof and also work in the dark.
+I love those [ELP 1080P USB cameras](https://de.aliexpress.com/item/4000562253329.html), which are IP66 waterproof and have IR LEDs for night vision.
+
 <img alt="ELP 1080p" src="_img/elp-1080p.jpg?raw=true" width="400" />
 
 ---
@@ -169,23 +172,20 @@ You can then access them via HomeKit.
 *Persistent Snapshots* are currently supported by [Home+](https://hochgatterer.me/home),
 as you can see from the following screenshots.
 
-| Services | Live Streaming | List of Snapshots |
-|--------- | -------------- | ----------------- |
-| <img alt="Services" src="_img/services.jpg?raw=true" width="280" /> | <img alt="Live streaming" src="_img/live-stream.jpg?raw=true" width="280" /> | <img alt="Snapshots" src="_img/snapshots.jpg?raw=true" width="280" /> |
+<img alt="Live streaming" src="_img/homeplus-stream.png?raw=true" width="280" />
+<img alt="Snapshots" src="_img/homeplus-snapshots.png?raw=true" width="280" />
+<img alt="Automation" src="_img/homeplus-automation.jpeg?raw=true" width="280" />
 
-| Snapshot | Automation |
-| --------------| -------------- |
-| <img alt="Snapshot" src="_img/snapshot.jpg?raw=true" width="280" /> | <img alt="Automation" src="_img/automation.jpg?raw=true" width="280" /> |
-
-
-## Looking for an Enclosure
+## Raspberry Pi Zero W Enclosure?
 
 <img alt="Desk mount" src="_img/enclosure-desk.jpg?raw=true" width="320" />
 <img alt="Wall mount" src="_img/enclosure-wall.jpg?raw=true" width="320" />
 
-The 3D-printed enclosure is designed for a Raspberry Pi Zero W and standard camera module.
+I've also designed an enclsoure for the Raspberry Pi Zero W and standard camera module.
 You can use a stand to put the camera on a desk, or combine it with brackets of the [Articulating Raspberry Pi Camera Mount](https://www.prusaprinters.org/prints/3407-articulating-raspberry-pi-camera-mount-for-prusa-m) to mount it on a wall.
 The 3D-printed parts are available as STL files [here](https://github.com/brutella/hkcam/tree/master/enclosure).
+
+This enclosure is not waterproof and should not be used outside. Instead you should use an [ELP 1080P camera](https://de.aliexpress.com/item/4000562253329.html) and connect it via USB to a Raspberry Pi.
 
 <!-- #### Pre-configured Raspbian  Image
 
