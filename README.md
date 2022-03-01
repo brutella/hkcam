@@ -4,7 +4,7 @@
 It uses `ffmpeg` to access the camera stream and publishes the stream to HomeKit using [hap](https://github.com/brutella/hap).
 The camera stream can be viewed in a HomeKit app. For example my [Home+](https://hochgatterer.me/home) app works perfectly with `hkcam`.
 
-<img alt="Camera Stream" src="_img/home-app-camera.jpeg?raw=true" />
+<img alt="Camera Stream" src="_img/home-app-camera.jpeg?raw=true" width="400" />
 
 ## Features
 
