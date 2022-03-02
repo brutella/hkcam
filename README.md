@@ -177,6 +177,17 @@ Taking snapshots in automations is also supported.
 
 <img alt="Automation" src="_img/homeplus-automation.jpeg?raw=true" width="280" />
 
+## Raspberry Pi Zero W
+
+I do get kernel panics when running hkcam with a ELP 1080P USB camera.
+Updating `/boot/config.txt` with the following changes resolve those kernel panics.
+
+```
+arm_freq=800
+arm_freq_max=900
+arm_freq_min=700
+```
+
 ## Raspberry Pi Zero W Enclosure
 
 <img alt="Desk mount" src="_img/enclosure-desk.jpg?raw=true" width="320" />
