@@ -174,7 +174,7 @@ func main() {
 }
 
 func snapshot(width, height uint, ffmpeg ffmpeg.FFMPEG) ([]byte, error) {
-	log.Debug.Printf("snasphot %dw x %dh\n", width, height)
+	log.Debug.Printf("snapshot %dw x %dh\n", width, height)
 
 	img, err := ffmpeg.Snapshot(width, height)
 	if err != nil {
