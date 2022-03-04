@@ -2,8 +2,8 @@ package ffmpeg
 
 import (
 	"fmt"
-	"github.com/brutella/hc/log"
-	"github.com/brutella/hc/rtp"
+	"github.com/brutella/hap/log"
+	"github.com/brutella/hap/rtp"
 	"image"
 	"io/ioutil"
 	"os"

@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/brutella/hc/log"
+	"github.com/brutella/hap/log"
 )
 
 // loopback copies data from the inpute filename to the loopback filename.

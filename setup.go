@@ -1,18 +1,20 @@
 package hkcam
 
 import (
+	"github.com/brutella/hap/accessory"
+	"github.com/brutella/hap/characteristic"
+	"github.com/brutella/hap/log"
+	"github.com/brutella/hap/rtp"
+	"github.com/brutella/hap/service"
+	"github.com/brutella/hap/tlv8"
+	"github.com/brutella/hkcam/ffmpeg"
+
 	"fmt"
-	"github.com/brutella/hc/accessory"
-	"github.com/brutella/hc/characteristic"
-	"github.com/brutella/hc/log"
-	"github.com/brutella/hc/rtp"
-	"github.com/brutella/hc/service"
-	"github.com/brutella/hc/tlv8"
+	"math/rand"
 	"net"
+	"net/http"
 	"reflect"
 	"strings"
-
-	"github.com/brutella/hkcam/ffmpeg"
 )
 
 // SetupFFMPEGStreaming configures a camera to use ffmpeg to stream video.
@@ -37,8 +39,7 @@ func first(ips []net.IP, filter func(net.IP) bool) net.IP {
 }
 
 func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPEG, multiStream bool) {
-	status := rtp.StreamingStatus{rtp.StreamingStatusAvailable}
-	setTLV8Payload(m.StreamingStatus.Bytes, status)
+	setTLV8Payload(m.StreamingStatus.Bytes, rtp.StreamingStatus{rtp.StreamingStatusAvailable})
 	setTLV8Payload(m.SupportedRTPConfiguration.Bytes, rtp.NewConfiguration(rtp.CryptoSuite_AES_CM_128_HMAC_SHA1_80))
 	setTLV8Payload(m.SupportedVideoStreamConfiguration.Bytes, rtp.DefaultVideoStreamConfiguration())
 	setTLV8Payload(m.SupportedAudioStreamConfiguration.Bytes, rtp.DefaultAudioStreamConfiguration())
@@ -52,18 +53,9 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 
 		id := ffmpeg.StreamID(cfg.Command.Identifier)
 		switch cfg.Command.Type {
-		case rtp.SessionControlCommandTypeEnd:
-			ff.Stop(id)
-
-			if ff.ActiveStreams() == 0 {
-				// Update stream status when no streams are currently active
-				setTLV8Payload(m.StreamingStatus.Bytes, rtp.StreamingStatus{rtp.StreamingStatusAvailable})
-			}
-
 		case rtp.SessionControlCommandTypeStart:
 			ff.Start(id, cfg.Video, cfg.Audio)
-
-			if multiStream == false {
+			if !multiStream {
 				// If only one video stream is suppported, set the status to busy.
 				// This way HomeKit knows that nobody is allowed to connect anymore.
 				// If multiple streams are supported, the status is always availabe.
@@ -75,20 +67,26 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 			ff.Resume(id)
 		case rtp.SessionControlCommandTypeReconfigure:
 			ff.Reconfigure(id, cfg.Video, cfg.Audio)
+		case rtp.SessionControlCommandTypeEnd:
+			ff.Stop(id)
+			setTLV8Payload(m.StreamingStatus.Bytes, rtp.StreamingStatus{rtp.StreamingStatusAvailable})
 		default:
 			log.Debug.Printf("Unknown command type %d", cfg.Command.Type)
 		}
 	})
 
-	m.SetupEndpoints.OnValueUpdateFromConn(func(conn net.Conn, c *characteristic.Characteristic, new, old interface{}) {
-		buf := m.SetupEndpoints.GetValue()
+	m.SetupEndpoints.OnValueUpdate(func(new, old []byte, r *http.Request) {
+		if r == nil {
+			return
+		}
+
 		var req rtp.SetupEndpoints
-		err := tlv8.Unmarshal(buf, &req)
+		err := tlv8.Unmarshal(new, &req)
 		if err != nil {
 			log.Debug.Fatalf("SetupEndpoints: Could not unmarshal tlv8 data: %s\n", err)
 		}
 
-		iface, err := ifaceOfConnection(conn)
+		iface, err := ifaceOfRequest(r)
 		if err != nil {
 			log.Debug.Println(err)
 			return
@@ -100,8 +98,8 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 		}
 
 		// TODO ssrc is different for every stream
-		ssrcVideo := int32(1)
-		ssrcAudio := int32(2)
+		ssrcVideo := rand.Int31()
+		ssrcAudio := rand.Int31()
 
 		resp := rtp.SetupEndpointsResponse{
 			SessionId: req.SessionId,
@@ -158,9 +156,14 @@ func ipAtInterface(iface net.Interface, version uint8) (net.IP, error) {
 	return nil, fmt.Errorf("%s: No ip address found for version %d", iface.Name, version)
 }
 
-// ifaceOfConnection returns the network interface at which the connection was established.
-func ifaceOfConnection(conn net.Conn) (*net.Interface, error) {
-	host, _, err := net.SplitHostPort(conn.LocalAddr().String())
+// ifaceOfRequest returns the network interface at which the connection was established.
+func ifaceOfRequest(r *http.Request) (*net.Interface, error) {
+	v := r.Context().Value(http.LocalAddrContextKey)
+	if v == nil {
+		return nil, fmt.Errorf("no local address in context")
+	}
+
+	host, _, err := net.SplitHostPort(v.(net.Addr).String())
 	if err != nil {
 		return nil, err
 	}

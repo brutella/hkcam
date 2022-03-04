@@ -1,7 +1,7 @@
 package hkcam
 
 import (
-	"github.com/brutella/hc/characteristic"
+	"github.com/brutella/hap/characteristic"
 )
 
 const TypeTakeSnapshot = "E8AEE54F-6E4B-46D8-85B2-FECE188FDB08"
@@ -16,7 +16,7 @@ type TakeSnapshot struct {
 func NewTakeSnapshot() *TakeSnapshot {
 	b := characteristic.NewBool(TypeTakeSnapshot)
 	b.Description = "Take Snapshot"
-	b.Perms = []string{characteristic.PermWrite}
+	b.Permissions = []string{characteristic.PermissionWrite}
 
 	return &TakeSnapshot{b}
 }

@@ -4,7 +4,6 @@
   become: true
   roles:
     - role: hkcam
-      disable_camera_led: false
       enabled: true
   tasks:    
     - name: Reboot

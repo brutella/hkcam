@@ -1,66 +1,14 @@
 ---
-- name: Update camera config
-  lineinfile:
-    dest: /boot/config.txt
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - { regexp: '^start_x=', line: 'start_x=1' }
-    - { regexp: '^gpu_mem=', line: 'gpu_mem=128' }
-
-- name: Disable camera led
-  lineinfile:
-    dest: /boot/config.txt
-    regexp: "^disable_camera_led="
-    line: "disable_camera_led=1"
-  when: disable_camera_led
-
-- name: Enable camera led
-  lineinfile:
-    dest: /boot/config.txt
-    regexp: "^disable_camera_led="
-    line: "disable_camera_led=0"
-  when: disable_camera_led == false
-
-- name: Install HKCam configuration file
-  copy:
-    dest: "/boot/hkcam.txt"
-    content: |
-      # Modify this file with the settings you want to have
-
-      # PIN used while pairing the device
-      export HKCAM_HOMEKIT_PIN=00102003
-
-      # Force a minimum bitrate on all streams.
-      # NOTE: specifying a high bit rate may cause some devices, such as the Apple Watch, to not function correctly
-      export HKCAM_MIN_BITRATE=0
-
-      # Rotate the camera view (e.g. set this to 180 if you mount your device upside down)
-      export HKCAM_ROTATION=0
-
-      # Enable multiple clients to watch the stream simultaneously
-      export HKCAM_MULTI_STREAM=false
-
-# - name: Add bcm2835 module
-#   modprobe:
-#     name: bcm2835-v4l2
-#     state: present
-
-- name: Add bcm2835 module
-  lineinfile:
-    dest: /etc/modules
-    regexp: "^bcm2835-v4l2"
-    line: "bcm2835-v4l2"
 
 - name: Update packages
   apt:
     update_cache: yes
     upgrade: yes
 
-- name: Reboot
-  changed_when: false
-  reboot:
-    reboot_timeout: 200
+# - name: Reboot
+#   changed_when: false
+#   reboot:
+#     reboot_timeout: 200
 
 - name: Install packages
   apt:
@@ -68,51 +16,15 @@
     state: present
   vars:
     packages:
-    - bc
-    - libncurses5-dev
     - ffmpeg
-    - raspberrypi-kernel-headers
+    - v4l2loopback-dkms
 
-# Old way of installing v4l2loopback
-# - name: Install rpi-source
-#   changed_when: false
-#   shell: sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/bin/rpi-source && sudo chmod +x /usr/bin/rpi-source && /usr/bin/rpi-source -q --tag-update
-#
-# - name: Install kernel source
-#   changed_when: false
-#   shell: rpi-source
-#
-# - name: Install v4l2loopback
-#   apt:
-#     name: "{{ packages }}"
-#     state: present
-#   vars:
-#     packages:
-#     - v4l2loopback-dkms
+- name: Enable v4l2loopback module
+  copy:
+    dest: "/etc/modules-load.d/v4l2loopback.conf"
+    content: "v4l2loopback"
 
-- name: Download v4l2loopback
-  get_url:
-     url: https://github.com/umlaeute/v4l2loopback/archive/v0.12.5.tar.gz
-     dest: /tmp
-  register: v4l2_pkg_download
-
-- name: Extract {{ v4l2_pkg_download }} to /tmp
-  unarchive:
-    src: "{{ v4l2_pkg_download.dest }}"
-    dest: "/tmp"
-    remote_src: true
-    list_files: true
-  register: v4l2_unarchived
-
-- name: Define extracted folder
-  set_fact: v4l2_unarchived_dir="/tmp/{{ v4l2_unarchived.files[0] | dirname }}"
-
-- name: Install v4l2loopback from source
-  changed_when: false
-  shell: cd {{ v4l2_unarchived_dir }} && make && sudo make install && depmod -a
-
-- name: Add v4l2loopback module
-  lineinfile:
-    dest: /etc/modules
-    regexp: "^v4l2loopback"
-    line: "v4l2loopback"
+- name: Set loopback file /dev/video99
+  copy:
+    dest: "/etc/modprobe.d/v4l2loopback.conf"
+    content: "options v4l2loopback video_nr=99"

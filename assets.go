@@ -1,7 +1,7 @@
 package hkcam
 
 import (
-	"github.com/brutella/hc/characteristic"
+	"github.com/brutella/hap/characteristic"
 )
 
 // TypeAssets is the uuid of the Assets characteristic
@@ -16,9 +16,9 @@ type Assets struct {
 
 func NewAssets() *Assets {
 	b := characteristic.NewBytes(TypeAssets)
-	b.Perms = []string{characteristic.PermRead, characteristic.PermEvents}
+	b.Permissions = []string{characteristic.PermissionRead, characteristic.PermissionEvents}
 
-	b.Value = []byte{}
+	b.SetValue([]byte{})
 
 	return &Assets{b}
 }
