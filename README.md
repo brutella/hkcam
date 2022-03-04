@@ -45,7 +45,7 @@ You can use a [camera module](https://www.raspberrypi.com/products/camera-module
 
 A great camera is the [ELP 1080P USB camera](https://de.aliexpress.com/item/4000562253329.html), which is IP66 waterproof and has IR LEDs for night vision.
 
-<img alt="ELP 1080p" src="_img/elp-1080p.jpg?raw=true" width="400" />
+<img alt="ELP 1080p" src="_img/elp-1080p.jpg?raw=true" width="280" />
 
 ---
 
@@ -111,15 +111,15 @@ wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_lin
 
 - Tap *More Options...*
 
-<img alt="More options" src="_img/home-app-more-options.jpeg?raw=true" width="400" />
+<img alt="More options" src="_img/home-app-more-options.jpeg?raw=true" width="280" />
 
 - Select *Camera* and confirm that the accessory is uncertified
 
-<img alt="Select Accessory" src="_img/home-app-select-camera.jpeg?raw=true" width="400" />
+<img alt="Select Accessory" src="_img/home-app-select-camera.jpeg?raw=true" width="280" />
 
 - Enter the pin `001-02-003` and Continue
 
-<img alt="Select Accessory" src="_img/home-app-pin.jpeg?raw=true" width="400" />
+<img alt="Select Accessory" src="_img/home-app-pin.jpeg?raw=true" width="280" />
 
 If everything works as expected, you have to configure `hkcam` as a daemon – so that hkcam is automatically run after boot.
 This can be done in different way – [systemd](https://www.raspberrypi.com/documentation/computers/using_linux.html#the-systemd-daemon) is recommended,
