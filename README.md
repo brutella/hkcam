@@ -6,14 +6,15 @@ The camera stream can be viewed in a HomeKit app. For example my [Home+](https:/
 
 <img alt="Camera Stream" src="_img/home-app-camera.jpeg?raw=true" width="400" />
 
+
+
 ## Features
 
 - Live streaming via HomeKit
 - Works with any HomeKit app (ex. [Home+](https://hochgatterer.me/home))
 - [Multistream Support](#multistream)
 - [Persistent Snapshots](#persistent-snapshots)
-- Runs on multiple platforms (Linux, macOS)
-
+- Runs on multiple platforms (Raspberry Pi OS, macOS)
 
 ## Get Started
 
@@ -40,12 +41,13 @@ brew install ffmpeg
 
 ### Raspberry Pi
 
-If you want to create your own surveillance camera, you can run `hkcam` on a Raspberry Pi.
-You can use a [camera module](https://www.raspberrypi.com/products/camera-module-v2/) or attach an USB camera.
-
-A great camera is the [ELP 1080P USB camera](https://de.aliexpress.com/item/4000562253329.html), which is IP66 waterproof and has IR LEDs for night vision.
+You can use a camera module or USB camera with a Raspberry Pi to create your own surveillance camera.
 
 <img alt="ELP 1080p" src="_img/elp-1080p.jpg?raw=true" width="280" />
+
+For example the [ELP 1080P USB camera dome](https://de.aliexpress.com/item/4000562253329.html) is great for outdoor use. It is IP66 waterproof and has built-in IR LEDs for night vision. This camera gets you good quality and great performance when running `hkcam` on the latest Raspberry Pi OS.
+
+A cheaper alternative is a [camera module](https://www.raspberrypi.com/products/camera-module-v2/) attached via ribbon cable. You'll have to enable **[Legacy Camera Support](https://www.raspberrypi.com/documentation/accessories/camera.html#libcamera-and-the-legacy-raspicam-camera-stack)** when using a camera module on Raspberry Pi OS. That's why this option is not ideal in my opinion.
 
 ---
 
