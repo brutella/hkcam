@@ -104,7 +104,7 @@ wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_lin
 - Extract the archive with `tar -xzf hkcam-v0.1.0_linux_arm.tar.gz`
 - Run `hkcam` by executing the following command
 ```
-./hkcam -db=/var/lib/hkcam/data -multi_stream=true -verbose
+./hkcam -data_dir=/var/lib/hkcam/data -multi_stream=true -verbose
 ```
 
 8. Add the camera to HomeKit
