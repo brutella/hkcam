@@ -185,7 +185,7 @@ Taking snapshots in automations is also supported.
 When running `hkcam` at a specific port (by specifying `-port=...`), you can access the web interface at the url http://{ip-address}:{port} with a browser.
 The web interface shows the recent snapshot and lets you install updates.
 
-<img alt="Web Interface" src="_img/web-interface.png?raw=true" width="280" />
+<img alt="Web Interface" src="_img/web-interface.png?raw=true" width="400" />
 
 ## Raspberry Pi Zero W
 
