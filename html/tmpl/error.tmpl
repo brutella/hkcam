@@ -1,0 +1,14 @@
+<div class="row text-center">
+    <div class="w-50 mx-auto">
+        <p>
+            {{ if .Error }}
+            <div class="h5">{{ .Error }}</div>
+            {{ end }}
+            {{ if .Reason }}
+            <div class="text-muted">{{ .Reason }}</div>
+            {{ end }}
+        </p>
+        
+        <a onclick="window.history.back();return false" class="btn btn-link" href="#">{{ T "Back" }}</a>
+    </div>
+</div>

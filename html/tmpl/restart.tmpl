@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row justify-content-center py-5">
+        <div class="col-12 col-md-8 col-lg-6 text-center">
+            <p>{{ template "partial/activity-indicator" }}</p>
+            <p>{{ T "Restarting..." }}</p>
+            <p class="text-secondary py-3">{{ T "Notice: The executing file is now terminated. Make sure that the system is automatically restarted." }}</p>
+            <script type="text/javascript">
+            window.onload = function() {
+                performSystemRestart(function(success) {
+                    setInterval(function() {
+                        performSystemHeartbeat(function(success) {
+                            // go to home page
+                            window.location = "/";
+                        })
+                    }, 5000)
+                })
+            }
+        
+            function performSystemRestart(callback) {
+                var xhttp = new APIRequest("POST", `/api/system/restart`);
+                xhttp.onreadystatechange = function() {
+                    if (xhttp.readyState == xhttp.DONE) {
+                        if (xhttp.status == 200) {
+                            var resp = JSON.parse(xhttp.responseText)
+                            if (resp.data) {
+                                callback(resp.data.success)
+                            }
+                        }
+                    }
+                  };
+                xhttp.send(null);
+            }
+        
+            function performSystemHeartbeat(callback) {
+                var xhttp = new APIRequest("GET", `/api/system/heartbeat`);
+                xhttp.onreadystatechange = function() {
+                    if (xhttp.readyState == xhttp.DONE) {
+                        if (xhttp.status == 200) {
+                            var resp = JSON.parse(xhttp.responseText)
+                            if (resp.data) {
+                                callback(resp.data.success)
+                            }
+                        }
+                    }
+                  };
+                xhttp.send(null);
+            }
+            </script>
+        </div>
+    </div>
+</div>

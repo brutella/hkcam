@@ -1,0 +1,51 @@
+{{ define "partial/update-alert" }}
+{{ if .Update }}
+    {{ $version := printf "<strong>%s</strong>" .Update.Version }}
+        {{ if .Update.Installing }}
+        <div class="alert alert-success m-0 d-flex justify-content-center" role="alert">
+            {{ template "partial/activity-indicator-sm" }}&nbsp;<span class="align-middle">{{ T "Update is being installed..." }}</span>
+        </div>
+        <script type="text/javascript">
+        window.onload = function() {
+            // refresh page every 10 sec
+            setInterval(refresh, 10000) 
+        }
+        function refresh() {
+            window.location.reload();
+        }
+        </script>
+        {{ else if .Update.Success }}
+        <div class="alert alert-success m-0 text-center" role="alert">
+            {{ (T "Version %s was successfully installed." $version) | _safeHTML }}
+            <form class="m-0" action="/cleanup-update-and-restart" method="POST" enctype="multipart/form-data">
+                <button class="btn btn-link btn-sm text-primary p-0 m-0" type="submit">{{ T "Restart Now" }}</button>
+            </form>
+        </div>
+        {{ else if .Update.Failure }}
+        <div class="alert alert-danger m-0 text-center" role="alert">
+            <i class="fas fa-exclamation-circle"></i> {{ (T "Updating to version %s failed." $version) | _safeHTML }}
+            <br/>
+            <span class="small">{{ .Update.Err }}</span>
+            <form class="m-0" action="/update/install" method="POST" enctype="multipart/form-data">
+                <button class="btn btn-link btn-sm text-primary p-0 m-0" type="submit">{{ T "Try Again" }}</button>
+            </form>
+        </div>
+        {{ else if .Update.Cancelled }}
+        <div class="alert alert-danger m-0 text-center" role="alert">
+            <i class="fas fa-exclamation-circle"></i> {{ (T "Updating to version %s was cancelled." $version) | _safeHTML }}
+            <form class="m-0" action="/update/install" method="POST" enctype="multipart/form-data">
+                <button class="btn btn-link btn-sm text-primary p-0 m-0" type="submit">{{ T "Try Again" }}</button>
+            </form>
+        </div>
+        {{ else }}
+        {{ $versionLink := printf "<a href='%s' target='_blank'>%s</a>" .Update.URL .Update.Version }}
+        <form class="m-0" action="/update/install" method="POST" enctype="multipart/form-data">
+            <div class="alert alert-success m-0 text-center" role="alert">
+                {{ (T "Version %s is available – you are using %s." $versionLink .App.Version) | _safeHTML }}
+                <br/>
+                <button type="submit" class="btn btn-link btn-sm text-primary p-0 m-0">{{ T "Install Now" }}</button>
+            </div>
+        </form>
+        {{ end }}
+{{ end }}
+{{ end }}

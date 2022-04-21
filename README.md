@@ -6,14 +6,13 @@ The camera stream can be viewed in a HomeKit app. For example my [Home+](https:/
 
 <img alt="Camera Stream" src="_img/home-app-camera.jpeg?raw=true" width="400" />
 
-
-
 ## Features
 
 - Live streaming via HomeKit
 - Works with any HomeKit app (ex. [Home+](https://hochgatterer.me/home))
 - [Multistream Support](#multistream)
 - [Persistent Snapshots](#persistent-snapshots)
+- [Built-in Web Interface](#web-interface)
 - Runs on multiple platforms (Raspberry Pi OS, macOS)
 
 ## Get Started
@@ -28,14 +27,16 @@ The fastest way to get started is to
 ```sh
 git clone https://github.com/brutella/hkcam && cd hkcam
 ```
-2. build and run `cmd/hkcam/main.go` by running `go run cmd/hkcam/main.go` in Terminal
+2. build and run `cmd/hkcam/main.go` by running `task hkcam` in Terminal
 3. open any HomeKit app and add the camera to HomeKit (pin for initial setup is `001 02 003`)
+3. view the web ui by entering the url http://localhost:8080
 
-These steps require *git*, *go* and *ffmpeg* to be installed. On macOS you can install them via Homebrew.
+These steps require *git*, *go*, *task* and *ffmpeg* to be installed. On macOS you can install them via Homebrew.
 
 ```sh
 brew install git
 brew install go
+brew install go-task/tap/go-task
 brew install ffmpeg
 ```
 
@@ -104,7 +105,7 @@ wget https://github.com/brutella/hkcam/releases/download/v0.1.0/hkcam-v0.1.0_lin
 - Extract the archive with `tar -xzf hkcam-v0.1.0_linux_arm.tar.gz`
 - Run `hkcam` by executing the following command
 ```
-./hkcam -data_dir=/var/lib/hkcam/data -multi_stream=true -verbose
+./hkcam -data_dir=/var/lib/hkcam/data -multi_stream=true -port=8080 -verbose
 ```
 
 8. Add the camera to HomeKit
@@ -178,6 +179,13 @@ as you can see from the following screenshots.
 Taking snapshots in automations is also supported.
 
 <img alt="Automation" src="_img/homeplus-automation.jpeg?raw=true" width="280" />
+
+## Web Interface
+
+When running `hkcam` at a specific port (by specifying `-port=...`), you can access the web interface at the url http://{ip-address}:{port} with a browser.
+The web interface shows the recent snapshot and lets you install updates.
+
+<img alt="Web Interface" src="_img/web-interface.png?raw=true" width="280" />
 
 ## Raspberry Pi Zero W
 

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+{{ template "partial/head" . }}
+<body class="bg-dark text-white">
+{{ template "partial/header" . }}
+{{ template "partial/message" . }}
+{{ template "partial/update-alert" . }}
+{{ yield }}
+{{ template "partial/footer" . }}
+{{ template "partial/foot" . }}
+</body>
+</html>

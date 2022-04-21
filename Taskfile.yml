@@ -23,28 +23,37 @@ tasks:
     lint:
         cmds:
             - golangci-lint run
+    build-fs:
+        cmds:
+            - esc -o cmd/hkcam/fs.go -ignore ".*\.go" html static
     hkcam:
         cmds:
-            - "go build -o {{ .BUILD_DIR }}/hkcam -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
-            - "{{ .BUILD_DIR }}/hkcam --verbose"
+            - task: build-fs
+            - "go build -o {{ .BUILD_DIR }}/hkcam -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
+            - "{{ .BUILD_DIR }}/hkcam --verbose --port={{ .PORT }} --data_dir=cmd/hkcam/db"
         vars:
             LDFLAGS: "\"-X main.Version={{ .VERSION }} -X main.Date={{ .DATE }}\""
+            PORT: '{{ default "8080" .PORT }}'
         sources:
+            - static/**/*
             - cmd/hkcam/main.go
-            - ./*.go
+            - api/*.go
+            - app/*.go
+            - html/**/*
             - Taskfile.yml
     pack:
         cmds:
+            - task: build-fs
             # Raspberry Pi
-            - "GOOS=linux GOARCH=arm GOARM=6 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_RPI }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
+            - "GOOS=linux GOARCH=arm GOARM=6 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_RPI }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
             # Linux
-            - "GOOS=linux GOARCH=amd64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_64 }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
+            - "GOOS=linux GOARCH=amd64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_64 }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
             # Linux
-            - "GOOS=linux GOARCH=386 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_32 }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
+            - "GOOS=linux GOARCH=386 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_32 }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
             # Intel Mac
-            - "GOOS=darwin GOARCH=amd64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_INTEL_MAC }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
+            - "GOOS=darwin GOARCH=amd64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_INTEL_MAC }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
             # M1 Mac
-            - "GOOS=darwin GOARCH=arm64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_M1_MAC }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go"
+            - "GOOS=darwin GOARCH=arm64 go build -o {{ .BUILD_DIR }}/{{ .PACKAGE_M1_MAC }}/{{ .BINARY }} -ldflags {{ .LDFLAGS }} cmd/hkcam/main.go cmd/hkcam/fs.go"
             # pack
             - "tar -cvzf {{ .PACKAGE_RPI }}.tar.gz -C {{ .BUILD_DIR }}/{{ .PACKAGE_RPI }} {{ .BINARY }}"
             - "tar -cvzf {{ .PACKAGE_LINUX_64 }}.tar.gz -C {{ .BUILD_DIR }}/{{ .PACKAGE_LINUX_64 }} {{ .BINARY }}"

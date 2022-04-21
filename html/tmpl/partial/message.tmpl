@@ -1,0 +1,16 @@
+{{ define "partial/message" }}
+{{ if .Message }}
+    <div class="container-fluid fixed-top" style="z-index:999;pointer-events: none;">
+        <div class="row py-2 justify-content-center">
+            <div class="col-auto">
+                <div class="bg-primary text-light rounded py-1 px-3 shadow" id="messageAlert">{{ .Message }}</div>
+            </div>
+        </div>
+    </div>
+    <script>
+    setTimeout(function () {
+        $('#messageAlert').fadeOut();
+    }, 3000);
+    </script>
+{{ end }}
+{{ end }}

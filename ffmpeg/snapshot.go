@@ -11,8 +11,13 @@ import (
 	"time"
 )
 
+type Snapshot struct {
+	Image image.Image
+	Date  time.Time
+}
+
 // snapshot returns an image by grapping a frame of the video stream.
-func snapshot(width, height uint, inputDevice, inputFilename string) (*image.Image, error) {
+func snapshot(width, height uint, inputDevice, inputFilename string) (*Snapshot, error) {
 	fileName := fmt.Sprintf("snapshot_%s.jpeg", time.Now().Format(time.RFC3339))
 	filePath := path.Join(os.TempDir(), fileName)
 
@@ -28,7 +33,12 @@ func snapshot(width, height uint, inputDevice, inputFilename string) (*image.Ima
 		return nil, err
 	}
 
-	return loadImage(filePath)
+	img, err := loadImage(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Snapshot{*img, time.Now()}, nil
 }
 
 func loadImage(path string) (*image.Image, error) {

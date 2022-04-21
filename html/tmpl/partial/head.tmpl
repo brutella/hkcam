@@ -1,0 +1,21 @@
+{{ define "partial/head" }}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+    {{ $v := .App.BuildDate.Unix }}
+    
+    <!-- Javascript -->
+    <script src="/static/js/sprintf.js?v={{ $v }}"></script>
+    <script src="/static/js/jquery.js?v={{ $v }}"></script>
+    <script src="/static/js/bootstrap.bundle.min.js?v={{ $v }}"></script>
+    <script src="/static/js/api.js?v={{ $v }}"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css?v={{ $v }}">
+    <link rel="stylesheet" media="all" href="/static/css/ispinner.prefixed.css?v={{ $v }}">
+    
+    <title>{{ .Title }}</title>
+</head>
+{{ end }}

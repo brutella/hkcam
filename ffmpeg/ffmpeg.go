@@ -2,12 +2,12 @@ package ffmpeg
 
 import (
 	"fmt"
-	"github.com/brutella/hap/log"
-	"github.com/brutella/hap/rtp"
-	"image"
 	"io/ioutil"
 	"os"
 	"sync"
+
+	"github.com/brutella/hap/log"
+	"github.com/brutella/hap/rtp"
 )
 
 // StreamID is the type of the stream identifier
@@ -22,7 +22,8 @@ type FFMPEG interface {
 	Resume(StreamID)
 	ActiveStreams() int
 	Reconfigure(StreamID, rtp.VideoParameters, rtp.AudioParameters) error
-	Snapshot(width, height uint) (*image.Image, error)
+	Snapshot(width, height uint) (*Snapshot, error)
+	RecentSnapshot(width, height uint) *Snapshot
 }
 
 var Stdout = ioutil.Discard
@@ -35,10 +36,11 @@ func EnableVerboseLogging() {
 }
 
 type ffmpeg struct {
-	cfg     Config
-	loop    *loopback
-	mutex   *sync.Mutex
-	streams map[StreamID]*stream
+	cfg      Config
+	loop     *loopback
+	mutex    *sync.Mutex
+	streams  map[StreamID]*stream
+	snapshot *Snapshot
 }
 
 // New returns a new ffmpeg handle to start and stop video streams and to make snapshots.
@@ -166,13 +168,21 @@ func (f *ffmpeg) startLoopback() {
 	}
 }
 
-func (f *ffmpeg) Snapshot(width, height uint) (*image.Image, error) {
+func (f *ffmpeg) RecentSnapshot(width, height uint) *Snapshot {
+	f.mutex.Lock()
+	defer f.mutex.Unlock()
+
+	return f.snapshot
+}
+
+func (f *ffmpeg) Snapshot(width, height uint) (*Snapshot, error) {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
 
 	f.startLoopback()
 
 	shot, err := snapshot(width, height, f.videoInputDevice(), f.videoInputFilename())
+	f.snapshot = shot
 
 	if f.loop != nil {
 		for _, s := range f.streams {

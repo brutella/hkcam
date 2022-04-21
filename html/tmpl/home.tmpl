@@ -1,0 +1,91 @@
+<div class="container py-2">
+    <div class="row text-center">
+        <div class="col-12">
+            <img id="snapshot" class="img-fluid">
+            <div class="fs-1" id="activityIndicator">
+                <p>{{ template "partial/activity-indicator" }}</p>
+                <p class="text-muted">{{ T "Loading..." }}</p>
+            </div>
+            <div id="date" class="py-2"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    let img = document.getElementById('snapshot')
+    let activityIndicator = document.getElementById('activityIndicator');
+    let dateSpan = document.getElementById('date')
+    
+    // load new snapshots every 10 sec
+    setInterval(function() {
+        loadNewSnapshot()
+    }, 10000)
+    
+    // load recent snapshot
+    getRecentSnapshot(function(image) {
+        // show recent snapshot
+        img.src = "data:image/jpeg;base64," + image.bytes;
+        activityIndicator.classList.add("d-none");
+        img.dataset.date = image.date;
+        updateSnapshotDate(image.date)
+        loadNewSnapshot()
+    })
+    
+    setInterval(function() {
+        updateSnapshotDate(img.dataset.date)
+    }, 1000)
+
+    
+    function loadNewSnapshot() {
+        getNewSnapshot(function(image) {
+            img.src = "data:image/jpeg;base64," + image.bytes;
+            activityIndicator.classList.add("d-none");
+            let date = new Date();
+            img.dataset.date = date;
+            updateSnapshotDate(date)
+        })
+    }
+    
+    function updateSnapshotDate(timestamp) {
+        if (timestamp == null) {
+            dateSpan.innerText = "";
+            return
+        }
+        let date = new Date(timestamp);
+        let now = new Date()
+        let seconds = parseInt((now - date)/1000);
+        dateSpan.innerText = sprintf("%04d-%02d-%02d %02d:%02d:%02d", date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds() );
+        if (seconds == 0) {
+            dateSpan.innerText = {{ T "Now" }};
+        } else {
+            dateSpan.innerText = sprintf("%d sec ago", seconds);
+        }
+    }
+    
+    function getRecentSnapshot(callback) {
+        var xhttp = new APIRequest("GET", `/api/snapshots/recent`);
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == xhttp.DONE) {
+                if (xhttp.status == 200) {
+                    var resp = JSON.parse(xhttp.responseText)
+                    if (resp.data) {
+                        callback(resp.data)
+                    }
+                }
+            }
+          };
+        xhttp.send(null);
+    }
+    
+    function getNewSnapshot(callback) {
+        var xhttp = new APIRequest("GET", `/api/snapshots/new`);
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == xhttp.DONE) {
+                var resp = JSON.parse(xhttp.responseText)
+                if (resp.data) {
+                    callback(resp.data)
+                }
+            }
+          };
+        xhttp.send(null);
+    }
+</script>
