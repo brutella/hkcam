@@ -157,7 +157,7 @@ Once the command finishes, your camera can be added to HomeKit.
 ## Multistream
 
 Normally in HomeKit a camera stream can only be viewed by one device at a time.
-If a second device wants to to view the stream, the Apple Home app shows
+If a second device wants to view the stream, the Apple Home app shows
 
 > **Camera Not Available**
 > Wait until someone else in this home stops viewing this camera and try again.
@@ -189,7 +189,7 @@ The web interface shows the recent snapshot and lets you install updates.
 
 ## Raspberry Pi Zero W
 
-I do get kernel panics when running hkcam with a ELP 1080P USB camera.
+I do get kernel panics when running hkcam with an ELP 1080P USB camera.
 Updating `/boot/config.txt` with the following changes resolve those kernel panics.
 
 ```
@@ -203,11 +203,11 @@ arm_freq_min=700
 <img alt="Desk mount" src="_img/enclosure-desk.jpg?raw=true" width="320" />
 <img alt="Wall mount" src="_img/enclosure-wall.jpg?raw=true" width="320" />
 
-I've also designed an enclsoure for the Raspberry Pi Zero W and standard camera module.
+I've also designed an enclosure for the Raspberry Pi Zero W and standard camera module.
 You can use a stand to put the camera on a desk, or combine it with brackets of the [Articulating Raspberry Pi Camera Mount](https://www.prusaprinters.org/prints/3407-articulating-raspberry-pi-camera-mount-for-prusa-m) to mount it on a wall.
 The 3D-printed parts are available as STL files [here](https://github.com/brutella/hkcam/tree/master/enclosure).
 
-This enclosure is not waterproof and should not be used outside. Instead you should use an [ELP 1080P camera](https://de.aliexpress.com/item/4000562253329.html) and connect it via USB to a Raspberry Pi.
+This enclosure is not waterproof and should not be used outside. Instead, you should use an [ELP 1080P camera](https://de.aliexpress.com/item/4000562253329.html) and connect it via USB to a Raspberry Pi.
 
 <!-- #### Pre-configured Raspbian  Image
 
@@ -215,7 +215,7 @@ You can use a pre-configured Raspbian Stretch Lite image, where everything is al
 
 You only need to
 
-1. download the pre-configured Raspbian image and copy onto an sd card; [download](https://github.com/brutella/hkcam/releases/download/v0.0.9/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.9-armv6.img.zip)
+1. download the pre-configured Raspbian image and copy onto a sd card; [download](https://github.com/brutella/hkcam/releases/download/v0.0.9/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.9-armv6.img.zip)
 
 - **Note**: This image only works on a Raspberry Pi Zero
 
@@ -239,7 +239,7 @@ You only need to
 > sudo dd bs=1m if=~/Downloads/raspbian-stretch-lite-2019-04-08-hkcam-v0.0.9-armv6.img of=/dev/rdisk3 conv=sync
 > ```
 
-3. add your WiFi credentials so that the Raspberry Pi can connect to your WiFi
+3. add your Wi-Fi credentials so that the Raspberry Pi can connect to your Wi-Fi
 
 - create a new text file at `/Volumes/boot/wpa_supplicant.conf` with the following content
 ```sh
@@ -251,7 +251,7 @@ ssid="<ssid>"
 psk="<password>"
 }
 ```
-- replace `<ssid>` with the name of your WiFi, and `<password>` with the WiFi password.
+- replace `<ssid>` with the name of your Wi-Fi, and `<password>` with the Wi-Fi password.
 
 4. insert the sd card into your Raspberry Pi and power it up.
 (After a reboot it may take up to several minutes until the camera is accessible via HomeKit – see [issue #136](https://github.com/brutella/hap/issues/136).)
@@ -313,7 +313,7 @@ After the playbook finishes, the RPi is ready to be used as a HomeKit camera.
 **Additional Steps**
 
 - I recommend to change the password of the `pi` user, once you have configured your Raspberry Pi.
-- If you want to have multiple cameras on your network, you have to make sure that the hostnames are unqiue. By default the hostname of the Raspberry Pi is `raspberrypi.local`.
+- If you want to have multiple cameras on your network, you have to make sure that the hostnames are unique. By default, the hostname of the Raspberry Pi is `raspberrypi.local`.
 - SSH is enabled in the hkcam image. You may want to disable it.
 
 **Debugging**
@@ -331,7 +331,7 @@ You can use a stand to put the camera on a desk, or combine it with brackets of 
 The 3D-printed parts are available as STL files [here](https://github.com/brutella/hkcam/tree/master/enclosure).
 
 # Advanced Configuration
-The application can be further configured using flags in the startup script. These can lead to a misconfigured system and shoud be used at your own caution.
+The application can be further configured using flags in the startup script. These can lead to a misconfigured system and should be used at your own caution.
 
 These settings can be changed in the startup script ```/etc/sv/hkcam/run```.
 
@@ -345,11 +345,11 @@ exec hkcam --data_dir=/var/lib/hkcam/data --verbose=true
 | Flag | Default value | Description |
 |--------- | -------------- | ----------------- |
 | min_video_bitrate | ```0``` | minimum video bit rate in kbps|
-| multi_stream | ```false``` | "Allow mutliple clients to view the stream simultaneously|
+| multi_stream | ```false``` | "Allow multiple clients to view the stream simultaneously|
 | data_dir | ```"Camera"``` | Path to data directory|
 | verbose | ```true```| Verbose logging|
 | pin | ```"00102003"``` | PIN for HomeKit pairing |
-| port | ```""``` | Port on which transport is reachable, random  portif empty |
+| port | ```""``` | Port on which transport is reachable, random port if empty |
 
 ## Network
 `hkcam` uses bonjour for service discovery. The port used for this ```5353```.

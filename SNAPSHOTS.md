@@ -9,7 +9,7 @@ You can then access them via HomeKit.
 ## Why?
 
 Taking snapshots is an essential feature of any security camera.
-For example you want to take a snapshot once motion is detected in room.
+For example, you want to take a snapshot once motion is detected in room.
 But there are currently no IP cameras which support that via HomeKit.
 
 `hkcam` implements *Persistent Snapshots* with custom HomeKit characteristics.

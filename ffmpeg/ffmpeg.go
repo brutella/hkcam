@@ -107,7 +107,7 @@ func (f *ffmpeg) Stop(id StreamID) {
 	if f.loop != nil {
 		for _, s := range f.streams {
 			if s.isActive() {
-				log.Debug.Printf("Active sesssions %v\n", f.streams)
+				log.Debug.Printf("Active sessions %v\n", f.streams)
 				return
 			}
 		}
@@ -187,7 +187,7 @@ func (f *ffmpeg) Snapshot(width, height uint) (*Snapshot, error) {
 	if f.loop != nil {
 		for _, s := range f.streams {
 			if s.isActive() {
-				log.Debug.Printf("Active sesssions %v\n", f.streams)
+				log.Debug.Printf("Active sessions %v\n", f.streams)
 				return shot, err
 			}
 		}

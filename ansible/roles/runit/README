@@ -13,5 +13,5 @@ Options
     exec 2>&1
     exec telegraf --config /etc/telegraf/telegraf.conf
 
-- finish_script (shell script) – The script which is excuted when the run script finishes.
+- finish_script (shell script) – The script which is executed when the run script finishes.
 - log_dir (string) – Path to the log directory, e.g. `/var/log/{service_name}`

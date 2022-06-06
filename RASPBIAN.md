@@ -110,7 +110,7 @@ e2fsck -f /dev/sda2
 resize2fs -M /dev/sda2
 #> The filesystem on /dev/sda2 is now 504923 (4k) blocks long.
 # Remember the block size (4k) and count (504923)
-# Now shrink the parition to 504923 * 4k = 2019692k
+# Now shrink the partition to 504923 * 4k = 2019692k
 # https://askubuntu.com/questions/780284/shrinking-ext4-partition-on-command-line
 fdisk /dev/sda
 # 1. Delete partition 2
@@ -119,7 +119,7 @@ d
 # - same START sector
 # - new END sector +2019692K (note '+' and uppercase 'K')
 n
-# 3. Check parition table
+# 3. Check partition table
 p
 # 3. Commit changes
 w

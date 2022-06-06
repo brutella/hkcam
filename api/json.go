@@ -6,7 +6,7 @@ import (
 )
 
 // WriteJSON responds to request r by encoding and sending v as json.
-// If v is an instance of of an ErrResponse, the response status code is 400 (Bad Request).
+// If v is an instance of an ErrResponse, the response status code is 400 (Bad Request).
 func WriteJSON(w http.ResponseWriter, r *http.Request, v interface{}) error {
 	switch v.(type) {
 	case *ErrResponse, ErrResponse:

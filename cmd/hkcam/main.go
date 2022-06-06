@@ -71,7 +71,7 @@ func main() {
 	}
 
 	var minVideoBitrate *int = flag.Int("min_video_bitrate", 0, "minimum video bit rate in kbps")
-	var multiStream *bool = flag.Bool("multi_stream", false, "Allow mutliple clients to view the stream simultaneously")
+	var multiStream *bool = flag.Bool("multi_stream", false, "Allow multiple clients to view the stream simultaneously")
 	var dataDir *string = flag.String("data_dir", "db", "Path to data directory")
 	var verbose *bool = flag.Bool("verbose", false, "Verbose logging")
 	var pin *string = flag.String("pin", "00102003", "PIN for HomeKit pairing")
