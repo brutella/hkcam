@@ -8,15 +8,15 @@ import (
 	"net/http"
 )
 
-type UdpdatePage struct {
+type UpdatePage struct {
 	Page
 }
 
-// CheckForUpdate downloads the latest release and stores it as an db.Update in the database.
+// CheckForUpdate downloads the latest release and stores it as a db.Update in the database.
 // The user is then redirected to the previous page.
 // If no update was found, a message is shown to the user that no updates are available.
 func (h *Html) CheckForUpdate(w http.ResponseWriter, r *http.Request) {
-	p := UdpdatePage{}
+	p := UpdatePage{}
 	p.UpdateWithRequest(r, h)
 
 	selfupdate.EnableLog()
@@ -37,7 +37,7 @@ func (h *Html) CheckForUpdate(w http.ResponseWriter, r *http.Request) {
 
 // InstallLatestVersion installs the latest release no matter of the current build version
 func (h *Html) InstallLatestVersion(w http.ResponseWriter, r *http.Request) {
-	p := UdpdatePage{}
+	p := UpdatePage{}
 	p.UpdateWithRequest(r, h)
 
 	url := p.Referrer
@@ -61,9 +61,9 @@ func (h *Html) InstallLatestVersion(w http.ResponseWriter, r *http.Request) {
 }
 
 // InstallUpdate installs the latest release, if an update is already store din the database.
-// If no update is stored in the database or an install process currently running, this method does nothing.
+// If no update is stored in the database or an installation process currently running, this method does nothing.
 func (h *Html) InstallUpdate(w http.ResponseWriter, r *http.Request) {
-	p := UdpdatePage{}
+	p := UpdatePage{}
 	p.UpdateWithRequest(r, h)
 	if u := p.Update; u != nil {
 		switch u.State {

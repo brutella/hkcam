@@ -1,6 +1,6 @@
 # Debugging
 
-ffmpeg can be used to debug SRTP streaming by using ffmpeg and ffplay.
+ffmpeg can be used to debug RTSP streaming by using ffmpeg and ffplay.
 Install ffmpeg and ffplay via `brew install ffmpeg --with-ffplay`.
 
 ## RTSP Streaming
@@ -39,11 +39,11 @@ ffplay -i <path-to-sdp-file> -protocol_whitelist file,udp,rtp
 
 ## Bitrate
 
-FFMPEG cannot set the bitrate on Rasbperry Pi, we have to do it manually with `v4l2-ctl --set-ctrl video_bitrate=300000`.
+ffmpeg cannot set the bitrate on Raspberry Pi, we have to do it manually with `v4l2-ctl --set-ctrl video_bitrate=300000`.
 
 ## Streaming issues
 
 ffmpeg only sends one H264 keyframe at the beginning of a RTP stream on the RPi because of https://video.stackexchange.com/a/21245
 If we open the stream after it has been started using ffplay, we missed the keyframe and never get one – results in error: decode_slice_header error.
 
-Therefore we have to start ffplay before starting streaming.
+Therefore, we have to start ffplay before starting streaming.

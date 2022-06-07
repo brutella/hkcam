@@ -20,7 +20,7 @@ import (
 const TypeCameraControl = "19BDAD9E-6102-48D5-B413-3F11253706AE"
 
 // RefDate represents the reference date used to generate asset ids.
-// Short ids are prefered and therefore we use 1st April 2019 as the reference date.
+// Short ids are preferred and therefore we use 1st April 2019 as the reference date.
 var RefDate = time.Date(2019, 4, 1, 0, 0, 0, 0, time.UTC)
 
 type CameraControl struct {

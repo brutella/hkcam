@@ -56,9 +56,9 @@ func setupStreamManagement(m *service.CameraRTPStreamManagement, ff ffmpeg.FFMPE
 		case rtp.SessionControlCommandTypeStart:
 			ff.Start(id, cfg.Video, cfg.Audio)
 			if !multiStream {
-				// If only one video stream is suppported, set the status to busy.
+				// If only one video stream is supported, set the status to busy.
 				// This way HomeKit knows that nobody is allowed to connect anymore.
-				// If multiple streams are supported, the status is always availabe.
+				// If multiple streams are supported, the status is always available.
 				setTLV8Payload(m.StreamingStatus.Bytes, rtp.StreamingStatus{rtp.StreamingStatusBusy})
 			}
 		case rtp.SessionControlCommandTypeSuspend:

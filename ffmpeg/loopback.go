@@ -17,7 +17,7 @@ import (
 // This is needed to provide simultaneous access to a v4l2 device.
 // On a Raspberry Pi you can create a video loopback device at /dev/video1 via [v4l2loopback](https://github.com/umlaeute/v4l2loopback).
 // The data from /dev/video0 is then copied to /dev/video1 via `ffmpeg -f v4l2 -i /dev/video0 -codec:v copy -f v4l2 /dev/video1`.
-// The loopback device can then be access simultanously from multiple ffmpeg processes.
+// The loopback device can then be access simultaneously from multiple ffmpeg processes.
 type loopback struct {
 	inputDevice      string
 	inputFilename    string

@@ -253,7 +253,7 @@ func audioSamplingRate(param rtp.AudioParameters) string {
 	case rtp.AudioCodecSampleRate24Khz:
 		return "24k"
 	default:
-		log.Info.Println("audioSamplingRate() undefined samplrate", param.CodecParams.Samplerate)
+		log.Info.Println("audioSamplingRate() undefined samplerate", param.CodecParams.Samplerate)
 		break
 	}
 
