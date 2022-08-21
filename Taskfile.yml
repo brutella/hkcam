@@ -25,7 +25,7 @@ tasks:
             - golangci-lint run
     build-fs:
         cmds:
-            - esc -o cmd/hkcam/fs.go -ignore ".*\.go" html static
+            - go run github.com/mjibson/esc -o cmd/hkcam/fs.go -ignore ".*\.go" html static
     hkcam:
         cmds:
             - task: build-fs
