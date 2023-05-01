@@ -22,7 +22,15 @@ func snapshot(width, height uint, inputDevice, inputFilename string) (*Snapshot,
 	filePath := path.Join(os.TempDir(), fileName)
 
 	// height "-2" keeps the aspect ratio
-	arg := fmt.Sprintf("-f %s -framerate 30 -i %s -vf scale=%d:-2 -frames:v 1 %s", inputDevice, inputFilename, width, filePath)
+	// arg := fmt.Sprintf("-f %s -framerate 30 -i %s -vf scale=%d:-2 -frames:v 1 %s", inputDevice, inputFilename, width, filePath)
+	var arg string
+
+	// @TODO: Refactor to switch
+	if inputDevice == "rtsp" {
+		arg = fmt.Sprintf("-i %s -vf scale=%d:-2 -frames:v 1 %s", inputFilename, width, filePath)
+	} else {
+		arg = fmt.Sprintf("-f %s -framerate 30 -i %s -vf scale=%d:-2 -frames:v 1 %s", inputDevice, inputFilename, width, filePath)
+	}
 	args := strings.Split(arg, " ")
 
 	cmd := exec.Command("ffmpeg", args[:]...)

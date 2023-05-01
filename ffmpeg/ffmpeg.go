@@ -47,7 +47,7 @@ type ffmpeg struct {
 // If cfg specifies a video loopback, ffmpeg configures a loopback to support simultaneous access to the video device.
 func New(cfg Config) *ffmpeg {
 	var loop *loopback = nil
-	if cfg.LoopbackFilename != "" {
+	if cfg.LoopbackFilename != "" && cfg.InputDevice != "rtsp" {
 		loop = NewLoopback(cfg.InputDevice, cfg.InputFilename, cfg.LoopbackFilename)
 	}
 
@@ -204,7 +204,7 @@ func (f *ffmpeg) videoInputDevice() string {
 }
 
 func (f *ffmpeg) videoInputFilename() string {
-	if f.cfg.LoopbackFilename != "" {
+	if f.cfg.LoopbackFilename != "" && f.cfg.InputDevice != "rtsp" {
 		return f.cfg.LoopbackFilename
 	}
 
