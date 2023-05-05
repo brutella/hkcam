@@ -76,6 +76,7 @@ func main() {
 	var verbose *bool = flag.Bool("verbose", false, "Verbose logging")
 	var pin *string = flag.String("pin", "00102003", "PIN for HomeKit pairing")
 	var port *string = flag.String("port", "", "Port on which transport is reachable")
+	var cameraName *string = flag.String("name", "Camera", "Name to show in HomeKit")
 
 	flag.Parse()
 
@@ -91,7 +92,7 @@ func main() {
 
 	log.Info.Printf("version %s (built at %s)\n", Version, Date)
 
-	switchInfo := accessory.Info{Name: "Camera", Firmware: Version, Manufacturer: "Matthias Hochgatterer"}
+	switchInfo := accessory.Info{Name: *cameraName, Firmware: Version, Manufacturer: "HKCam"}
 	cam := accessory.NewCamera(switchInfo)
 
 	cfg := ffmpeg.Config{
