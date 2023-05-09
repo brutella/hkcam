@@ -28,4 +28,4 @@ package: build
 	tar -cvzf $(PACKAGE_RPI).tar.gz -C $(BUILD_DIR) $(PACKAGE_RPI)
 
 build: build-fs
-	GOOS=linux GOARCH=arm GOARM=6 $(GOBUILD) -o $(BUILD_DIR)/$(PACKAGE_RPI)/usr/bin/hkcam -i cmd/hkcam/main.go
+	GOOS=linux GOARCH=arm GOARM=6 $(GOBUILD) -o $(BUILD_DIR)/$(PACKAGE_RPI)/usr/bin/hkcam -ldflags "-X main.Version=dev -X main.Date=$$(date +%FT%TZ%z)" cmd/hkcam/main.go cmd/hkcam/fs.go
